@@ -45,6 +45,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -56,6 +58,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -73,7 +76,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.125, y: 0.625}
+  m_Size: {x: 0.84375, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -127,7 +130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd146093740c5d43b5909c7913f3109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  movementSpeed: 0
+  sprintingSpeed: 0
 --- !u!212 &5628018141983903107
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -142,6 +146,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -153,6 +159,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -170,7 +177,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.65625, y: 1.4}
+  m_Size: {x: 0.65625, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -194,7 +201,7 @@ BoxCollider2D:
     border: {x: 0, y: 0.03125, z: 0, w: 0.9375}
     pivot: {x: 0.5, y: 0}
     oldSize: {x: 0.65625, y: 1.5}
-    newSize: {x: 0.65625, y: 1.4}
+    newSize: {x: 0.65625, y: 1.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0

@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 09cde0800b5f5744e96a000a12f348dc
+guid: febba220f240b794fa079b35d94ab88c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7173041430691282384
-    second: TX Enemy Shooting_0
+      213: 21300000
+    second: TX Player F
   - first:
-      213: 963775165207468002
-    second: TX Enemy Shooting_1
+      213: 21300002
+    second: TX Player B
   - first:
-      213: -5418559303449955234
-    second: TX Enemy Shooting_2
+      213: 21300004
+    second: TX Player S
   - first:
-      213: 7415079233846186011
-    second: TX Enemy Shooting_3
+      213: 21300006
+    second: TX Shadow Player
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -44,7 +44,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -55,10 +55,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -73,115 +73,115 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
+    textureFormat: 4
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
+    textureFormat: 4
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TX Enemy Shooting_0
+      name: TX Player F
       rect:
         serializedVersion: 2
-        x: 5
-        y: 67
-        width: 22
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        x: 6
+        y: 70
+        width: 21
+        height: 48
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 1, z: 0, w: 30}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0328c7cb2dc347c90800000000000000
-      internalID: -7173041430691282384
+      spriteID: a5766e0acb972fc4a822fd0da3d78646
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TX Enemy Shooting_1
+      name: TX Player B
       rect:
         serializedVersion: 2
-        x: 37
-        y: 67
-        width: 24
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        x: 38
+        y: 70
+        width: 21
+        height: 48
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 1, z: 0, w: 30}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2e7d88d0864006d00800000000000000
-      internalID: 963775165207468002
+      spriteID: a5b86785e343a0d4cb6789e18659fc2b
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TX Enemy Shooting_2
+      name: TX Player S
       rect:
         serializedVersion: 2
-        x: 68
-        y: 67
+        x: 69
+        y: 70
+        width: 21
+        height: 48
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 1, z: 0, w: 31}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9ca82717e2de784b8635c80e5b0c18f
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TX Shadow Player
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 68
         width: 27
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 28
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e543a73b5096dc4b0800000000000000
-      internalID: -5418559303449955234
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TX Enemy Shooting_3
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 64
-        width: 28
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b1017c2c647a7e660800000000000000
-      internalID: 7415079233846186011
+      spriteID: 3a919befe8cac95409cfc0454a956cba
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -189,7 +189,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 57e538b12da3cef4ea18b351a5a2ff6d
     internalID: 0
     vertices: []
     indices: 
