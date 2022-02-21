@@ -10,7 +10,8 @@ public class EnemyAI : MonoBehaviour
     public float patrolSpeed;
     public float followSpeed;
     public float transitionSpeed;
-    public Transform[] patrolPattern; // array of preset patrol waypoint transform objects,
+    public GameObject waypoints;
+    private Transform[] patrolPattern;// array of preset patrol waypoint transform objects,
 
     private Animator animator;
 
@@ -20,6 +21,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        patrolPattern = waypoints.GetComponentsInChildren<Transform>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         ShufflePatrolPattern();
@@ -67,7 +69,7 @@ public class EnemyAI : MonoBehaviour
         // follows player then stops when the enemy has reached the player
         if (Vector2.Distance(playerOrigin, enemyOrigin) > 1)
         {
-            rb.velocity = directionToPlayer * followSpeed * Time.deltaTime;
+            rb.velocity = directionToPlayer * followSpeed * Time.fixedDeltaTime;
             UpdateAnimation();
         }
         else
