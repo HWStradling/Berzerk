@@ -6,6 +6,10 @@ TagManager:
   tags:
   - basic_gun_pickup
   - Enemy
+  - Arm
+  - Body
+  - Weapon
+  - basic_gun_arm
   layers:
   - Default
   - TransparentFX
