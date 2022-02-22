@@ -7,11 +7,20 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private GameObject[] inventoryUIItems;
     [SerializeField] private List<GameObject> inventory = new List<GameObject>();
     private GameObject selectedItem;
+    private Animator animator;
 
-
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            UpdateItemSelection(1);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             UpdateItemSelection(0);
         }
@@ -81,9 +90,12 @@ public class InventoryController : MonoBehaviour
         {
             return;
         }
-        else if (selection >= inventory.Count - 1)
+        else if (selection >= inventory.Count -1)
         {
-            selectedItem = inventory[selection];
+            animator.SetInteger("Selected", selection);
+
+            selectedItem = inventory[Mathf.Max(selection - 1,0) ];
+
             Debug.Log(selectedItem.tag);
             // update ui to highligh selected item,
             // update animator to display player with item sprites,

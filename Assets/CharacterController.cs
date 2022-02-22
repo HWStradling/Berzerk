@@ -6,13 +6,17 @@ public class CharacterController : MonoBehaviour
 {
     public float movementSpeed;
     public float sprintingSpeed;
+    public ArmController aC;
 
     private float horizontalInput = 0f;
     private float verticalInput = 0f;
     private Animator animator;
     private Vector2 direction = Vector2.zero;
+    [SerializeField] private int animatorDirection;
     private Rigidbody2D rb;
     private SpriteRenderer sr;
+    private bool isSprinting;
+    [SerializeField] private int selected;
 
     
 
@@ -29,20 +33,26 @@ public class CharacterController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         direction = new Vector2(horizontalInput, verticalInput);
+
+
+        
     }
 
     private void FixedUpdate()
     {
-        bool isSprinting = Input.GetKey(KeyCode.LeftShift);
+        
+        isSprinting = Input.GetKey(KeyCode.LeftShift);
         // switch for setting the animator state for left and right directions,
         switch (direction.x)
         {
             case  1:
                 animator.SetInteger("Direction", 2);
+                animatorDirection = 2;
                 sr.flipX = true; // flips sprite to allow left and right movement,
                 break;
             case -1:
                 animator.SetInteger("Direction", 3);
+                animatorDirection = 3;
                 sr.flipX = false;
                 break;
         }
@@ -51,10 +61,12 @@ public class CharacterController : MonoBehaviour
         {
             case 1:
                 animator.SetInteger("Direction", 1);
+                animatorDirection = 1;
                 sr.flipX = false;
                 break;
             case -1:
                 animator.SetInteger("Direction", 0);
+                animatorDirection = 0;
                 sr.flipX = false;
                 break;
         }
@@ -62,7 +74,6 @@ public class CharacterController : MonoBehaviour
         // updating the animator with the correct parameters for Walking and Sprinting,
         animator.SetBool("Walking", direction.y != 0 || direction.x != 0);
         animator.SetBool("Sprinting", isSprinting);
-       
         // moves the player,
         switch (Input.GetKey(KeyCode.LeftShift))
         {
@@ -73,7 +84,7 @@ public class CharacterController : MonoBehaviour
                 rb.velocity = sprintingSpeed * direction * Time.deltaTime;
                 break;
         }
+        
        
     }
 }
-
