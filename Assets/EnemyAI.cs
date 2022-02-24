@@ -5,34 +5,38 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
 
-    public Transform player;
-    public LayerMask WallLayer; // layer containing the wall's tilemap,
-    public float patrolSpeed;
-    public float followSpeed;
-    public float transitionSpeed;
-    public GameObject waypoints;
+    [SerializeField] private Transform player;
+    [SerializeField] private LayerMask WallLayer; // layer containing the wall's tilemap,
+    [SerializeField] private Animator animator;
+    [SerializeField] private Rigidbody2D rb;
+
+    [SerializeField] private float patrolSpeed;
+    [SerializeField] private float followSpeed;
+    [SerializeField] private float transitionSpeed;
+    [SerializeField] private GameObject waypoints;
+
+    [SerializeField] public int enemyType { get; private set; }
+    public bool attackState { get; private set; } = false; 
+
     private Transform[] patrolPattern;// array of preset patrol waypoint transform objects,
+    private int currentWaypoint = 0;
 
-    private Animator animator;
+    
+     
 
-    int currentWaypoint = 0;
-
-    Rigidbody2D rb;
-    // Start is called before the first frame update
     void Start()
     {
         patrolPattern = waypoints.GetComponentsInChildren<Transform>();
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         ShufflePatrolPattern();
     }
 
     void FixedUpdate()
     { 
         // follows the player if visible, patrols if not visible.
-        if (IsPlayerVisible())
+        if (IsPlayerVisible() && enemyType > 0)
         {
-            FollowPlayer(); 
+            FollowPlayer();
+            
         }else
         {
             FollowPatrolRoute();
@@ -53,7 +57,10 @@ public class EnemyAI : MonoBehaviour
 
         // if the ray does not collide with a wall the player must be visible.
         if (wallRay.collider == null)
+        {
             return true;
+        }
+           
 
         // if the ray collides with the wall, the player cannot be visible to the enemy,
         return false;
@@ -67,15 +74,17 @@ public class EnemyAI : MonoBehaviour
         Vector2 directionToPlayer = (playerOrigin - enemyOrigin).normalized;
 
         // follows player then stops when the enemy has reached the player
-        if (Vector2.Distance(playerOrigin, enemyOrigin) > 1)
+        if (Vector2.Distance(playerOrigin, enemyOrigin) > 1.5)
         {
             rb.velocity = directionToPlayer * followSpeed * Time.fixedDeltaTime;
             UpdateAnimation();
+            attackState = true;
         }
         else
         {
             rb.velocity = Vector2.zero;
             UpdateAnimation();
+            attackState = true;
         }
 
 

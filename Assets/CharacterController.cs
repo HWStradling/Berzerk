@@ -94,12 +94,11 @@ public class CharacterController : MonoBehaviour
             Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
             Vector2 directionToMouse = mousePos - (Vector2)arm.position;
             float angleToMouse = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg;
-            Debug.Log(angleToMouse);
             switch (directionFacing)
             {
                 case 0:// up,
                     arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, - 90 - aimingArc, -90 + aimingArc) + 90);
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, - 90 - aimingArc, -90 + aimingArc) + 90); // use different method !!!
                     return;
                 case 1: //up
                     arm.localRotation = Quaternion.Euler(0f, 0f, 0f);

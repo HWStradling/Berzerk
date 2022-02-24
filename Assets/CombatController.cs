@@ -13,8 +13,10 @@ public class CombatController : MonoBehaviour
 
     private WeaponType selectedWeapon = WeaponType.None;
     private int directionFacing = 0;
+    private bool allowAttack =  true;
     [SerializeField] GameObject[] bulletPrefabArray;
     [SerializeField] GameObject WeaponContainer;
+    [SerializeField] float bulletDelay;
 
 
     // Start is called before the first frame update
@@ -38,12 +40,12 @@ public class CombatController : MonoBehaviour
     private void AttackSequence()
     {
         GetSelectedWeapon();
-        if (selectedWeapon != WeaponType.None)
+        if (selectedWeapon != WeaponType.None && allowAttack == true)
         {
             switch (selectedWeapon)
             {
                 case WeaponType.BasicGun:
-                    BasicGunAttack();
+                    StartCoroutine(BasicGunAttack());
                     break;
                 case WeaponType.Rifle:
                     RifleAttack();
@@ -53,32 +55,35 @@ public class CombatController : MonoBehaviour
             }
         }
     }
-    private void BasicGunAttack()
+    IEnumerator BasicGunAttack()
     {
         
         Transform firepoint;
-        switch (directionFacing)
-        {
-            
-            case 0:
-                firepoint = GameObject.Find("bg_firepoint_down").transform;
-                Instantiate(bulletPrefabArray[0], firepoint.position, firepoint.rotation);
-                break;
-            case 1:
-                firepoint = GameObject.Find("bg_firepoint_up").transform;
-                //GameObject bullet = bulletPrefabArray[0]; // flips prefab for shooting up
-                //bullet.GetComponent<SpriteRenderer>().flipY = true;
-                Instantiate(bulletPrefabArray[1], firepoint.position, firepoint.rotation);
-                break;
-            case 2:
-            case 3:
-                firepoint = GameObject.Find("bg_firepoint_side").transform;
-                Instantiate(bulletPrefabArray[2], firepoint.position, firepoint.rotation);
-                break;
-            default:
-                break;
-        }
+            switch (directionFacing)
+            {
 
+                case 0:
+                    firepoint = GameObject.Find("bg_firepoint_down").transform;
+                    Instantiate(bulletPrefabArray[0], firepoint.position, firepoint.rotation);
+                    break;
+                case 1:
+                    firepoint = GameObject.Find("bg_firepoint_up").transform;
+                    //GameObject bullet = bulletPrefabArray[0]; // flips prefab for shooting up
+                    //bullet.GetComponent<SpriteRenderer>().flipY = true;
+                    Instantiate(bulletPrefabArray[1], firepoint.position, firepoint.rotation);
+                    break;
+                case 2:
+                case 3:
+                    firepoint = GameObject.Find("bg_firepoint_side").transform;
+                    Instantiate(bulletPrefabArray[2], firepoint.position, firepoint.rotation);
+                    break;
+                default:
+                    break;
+            }
+        allowAttack = false;
+        yield return new WaitForSeconds(bulletDelay);
+        allowAttack = true;
+        
 
     }
     private void RifleAttack()
