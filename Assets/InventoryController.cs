@@ -30,6 +30,12 @@ public class InventoryController : MonoBehaviour
     {
         return inventory;
     }
+
+    public GameObject GetSelectedItem()
+    {
+        return selectedItem;
+    }
+
     // checks if the item passed already exists in the players inventory,
     // returns true if it already exists,
     // returns false if it doesnt already exist,
@@ -76,7 +82,7 @@ public class InventoryController : MonoBehaviour
     {
         switch (item.tag) // checks item tag against available Inventory UI Icons, and sets active if equal;
         {
-            case "basic_gun_pickup":
+            case "basic_gun":
                 inventoryUIItems[0].SetActive(true);
                 return;
             default:

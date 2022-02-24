@@ -4,27 +4,29 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    public float movementSpeed;
-    public float sprintingSpeed;
-    public ArmController aC;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float sprintingSpeed;
+    [SerializeField] private float aimingArc;
+    [SerializeField] private ArmController aC;
+    [SerializeField] private Transform arm;
+    [SerializeField] private Transform weaponHandle;
+    
 
     private float horizontalInput = 0f;
     private float verticalInput = 0f;
     private Animator animator;
-    private Vector2 direction = Vector2.zero;
-    [SerializeField] private int animatorDirection;
+    private Vector2 directionOfTravel = Vector2.zero;
+    [SerializeField] private int directionFacing = 0;
     private Rigidbody2D rb;
-    private SpriteRenderer sr;
     private bool isSprinting;
-    [SerializeField] private int selected;
-
+    private Camera camera;
     
 
     private void Start()
     {
+        camera = Camera.main;
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -32,59 +34,102 @@ public class CharacterController : MonoBehaviour
         // gets the raw inputs and stores them in a vector2,
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        direction = new Vector2(horizontalInput, verticalInput);
-
-
-        
+        directionOfTravel = new Vector2(horizontalInput, verticalInput);
     }
+
 
     private void FixedUpdate()
     {
-        
-        isSprinting = Input.GetKey(KeyCode.LeftShift);
+        UpdateGunRotation();
+        isSprinting = Input.GetKey(KeyCode.LeftShift) && directionOfTravel != Vector2.zero;
         // switch for setting the animator state for left and right directions,
-        switch (direction.x)
+        switch (directionOfTravel.x)
         {
             case  1:
+                transform.rotation = new Quaternion(0f, 180f, 0f, 1);
                 animator.SetInteger("Direction", 2);
-                animatorDirection = 2;
-                sr.flipX = true; // flips sprite to allow left and right movement,
+                directionFacing = 2;
                 break;
             case -1:
+                transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 3);
-                animatorDirection = 3;
-                sr.flipX = false;
+                directionFacing = 3;
                 break;
         }
         // switch for setting the animator state for up and down directions,
-        switch (direction.y)
+        switch (directionOfTravel.y)
         {
             case 1:
+                transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 1);
-                animatorDirection = 1;
-                sr.flipX = false;
+                directionFacing = 1;
                 break;
             case -1:
+                transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 0);
-                animatorDirection = 0;
-                sr.flipX = false;
+                directionFacing = 0;
                 break;
         }
 
         // updating the animator with the correct parameters for Walking and Sprinting,
-        animator.SetBool("Walking", direction.y != 0 || direction.x != 0);
+        animator.SetBool("Walking", directionOfTravel.y != 0 || directionOfTravel.x != 0);
         animator.SetBool("Sprinting", isSprinting);
         // moves the player,
-        switch (Input.GetKey(KeyCode.LeftShift))
+        switch (Input.GetKey(KeyCode.LeftShift) && directionOfTravel != Vector2.zero)
         {
             case false:
-                rb.velocity = movementSpeed * direction * Time.deltaTime;
+                rb.velocity = movementSpeed * directionOfTravel * Time.deltaTime;
                 break;
             case true:
-                rb.velocity = sprintingSpeed * direction * Time.deltaTime;
+                rb.velocity = sprintingSpeed * directionOfTravel * Time.deltaTime;
                 break;
         }
+
         
-       
+    }
+    private void UpdateGunRotation()
+    {
+        if (arm.gameObject.activeSelf || weaponHandle.gameObject.activeSelf)
+        {
+            Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 directionToMouse = mousePos - (Vector2)arm.position;
+            float angleToMouse = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg;
+            Debug.Log(angleToMouse);
+            switch (directionFacing)
+            {
+                case 0:// up,
+                    arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, - 90 - aimingArc, -90 + aimingArc) + 90);
+                    return;
+                case 1: //up
+                    arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse,  90 - aimingArc, 90 + aimingArc) -90);
+                    return;
+                case 2:// right flip,
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    arm.localRotation = Quaternion.Euler(0f, 0f, - Mathf.Clamp(angleToMouse, -aimingArc, aimingArc));
+                    break;
+                case 3: // left,
+
+                    if (angleToMouse > 0)
+                    {
+                        weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        arm.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, 180 - aimingArc, 180) -180 );
+                    }
+                    if (angleToMouse < 0)
+                    {
+                        weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        arm.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, -180 , -180 + aimingArc ) + 180);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+    }
+    public int GetDirectionFacing()
+    {
+        return directionFacing;
     }
 }

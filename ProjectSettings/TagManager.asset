@@ -10,6 +10,7 @@ TagManager:
   - Body
   - Weapon
   - basic_gun_arm
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -47,7 +48,7 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: 1
+  - name: Player
     uniqueID: 2425651459
     locked: 0
   - name: 2
