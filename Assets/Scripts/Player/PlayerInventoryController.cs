@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryController : MonoBehaviour
+public class PlayerInventoryController : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryUIItems;
     [SerializeField] private List<GameObject> inventory = new List<GameObject>();
@@ -80,7 +80,7 @@ public class InventoryController : MonoBehaviour
 
     private void UpdateInventoryUI(GameObject item)
     {
-        switch (item.tag) // checks item tag against available Inventory UI Icons, and sets active if equal;
+        switch (item.name) // checks item tag against available Inventory UI Icons, and sets active if equal;
         {
             case "basic_gun":
                 inventoryUIItems[0].SetActive(true);

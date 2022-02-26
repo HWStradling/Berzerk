@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7755957796997930942}
   - component: {fileID: 6307267345530713534}
   - component: {fileID: 4544089705264953266}
-  - component: {fileID: 593032131721604417}
+  - component: {fileID: 1678745289821575088}
   m_Layer: 0
   m_Name: small_bullet_side
   m_TagString: Untagged
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 3
   m_Sprite: {fileID: 8848993070067138329, guid: 30edb9d12883df642bcb8b4f9bb0c3da,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -140,7 +140,7 @@ PolygonCollider2D:
       - {x: 0.13, y: -0.08846154}
       - {x: 0.25, y: -0.03}
       - {x: 0.22307692, y: 0.12692308}
---- !u!114 &593032131721604417
+--- !u!114 &1678745289821575088
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,7 +149,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3888545099882349768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2244c96c367474a820f4ab3c2b24e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 85b68c45093eddc4e8b7bbf2675bd56d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 3

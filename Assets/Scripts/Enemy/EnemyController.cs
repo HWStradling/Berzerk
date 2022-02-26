@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
 
     [SerializeField] private Transform player;
@@ -13,12 +13,14 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float patrolSpeed;
     [SerializeField] private float followSpeed;
     [SerializeField] private float transitionSpeed;
-    [SerializeField] private GameObject waypoints;
+    [SerializeField] private Transform[] patrolPattern;// array of preset patrol waypoint transform objects,
 
-    [SerializeField] public int enemyType { get; private set; }
-    public bool attackState { get; private set; } = false; 
+    [SerializeField] public int enemyType;
+    public bool attackState { get; private set; } = false;
+    public int DirectionFacingState { get; private set; } = 0;
 
-    private Transform[] patrolPattern;// array of preset patrol waypoint transform objects,
+
+
     private int currentWaypoint = 0;
 
     
@@ -26,21 +28,32 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        patrolPattern = waypoints.GetComponentsInChildren<Transform>();
         ShufflePatrolPattern();
     }
 
     void FixedUpdate()
-    { 
+    {
         // follows the player if visible, patrols if not visible.
-        if (IsPlayerVisible() && enemyType > 0)
+        if (player != null)
         {
-            FollowPlayer();
-            
-        }else
+            if (IsPlayerVisible() && enemyType > 0)
+            {
+                attackState = true;
+                FollowPlayer();
+
+            }
+            else
+            {
+                attackState = false;
+                FollowPatrolRoute();
+            }
+        }
+        else
         {
+            attackState = false;
             FollowPatrolRoute();
         }
+
     }
          
     
@@ -60,9 +73,10 @@ public class EnemyAI : MonoBehaviour
         {
             return true;
         }
-           
+
 
         // if the ray collides with the wall, the player cannot be visible to the enemy,
+        attackState = false;
         return false;
     }
 
@@ -77,14 +91,12 @@ public class EnemyAI : MonoBehaviour
         if (Vector2.Distance(playerOrigin, enemyOrigin) > 1.5)
         {
             rb.velocity = directionToPlayer * followSpeed * Time.fixedDeltaTime;
-            UpdateAnimation();
-            attackState = true;
+            UpdateAnimation();         
         }
         else
         {
             rb.velocity = Vector2.zero;
             UpdateAnimation();
-            attackState = true;
         }
 
 
@@ -127,11 +139,24 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
+    // shuffles patrol pattern when colliding with another enemy to prevent them hanging up,
+     void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (!attackState)
+            {
+                ShufflePatrolPattern();
+            }
+            
+        }
+    }
     // randomly shuffles the patrol pattern array when called to add randomness to the patrol.
-    void ShufflePatrolPattern()
+    private void ShufflePatrolPattern()
     {
         for (var i = patrolPattern.Length - 1; i > 0; i--)
         {
+             
             var rand = Random.Range(0, i);
             var temp = patrolPattern[i];
             patrolPattern[i] = patrolPattern[rand];
@@ -145,23 +170,35 @@ public class EnemyAI : MonoBehaviour
         {
             animator.SetBool("IsMoving", true);
             if (rb.velocity.y > 0)
+            {
                 animator.SetInteger("Direction", 1);
+                DirectionFacingState = 1;
+            }
             else
+            {
                 animator.SetInteger("Direction", 0);
+                DirectionFacingState = 0;
+            }
         }else if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.y))
         {
             animator.SetBool("IsMoving", true);
             if (rb.velocity.x > 0)
+            {
                 animator.SetInteger("Direction", 2);
+                DirectionFacingState = 2;
+            }
             else
+            {
                 animator.SetInteger("Direction", 3);
+                DirectionFacingState = 3;
+            }
         }
         else
         {
             animator.SetBool("IsMoving", false);
         }
-        
 
-        
-    }
+}
+
+    
 }

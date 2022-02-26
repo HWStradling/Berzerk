@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
     [SerializeField] private float sprintingSpeed;
     [SerializeField] private float aimingArc;
-    [SerializeField] private ArmController aC;
     [SerializeField] private Transform arm;
     [SerializeField] private Transform weaponHandle;
     
@@ -16,10 +15,10 @@ public class CharacterController : MonoBehaviour
     private float verticalInput = 0f;
     private Animator animator;
     private Vector2 directionOfTravel = Vector2.zero;
-    [SerializeField] private int directionFacing = 0;
+    public int DirectionFacingState { get; private set; } = 0;
     private Rigidbody2D rb;
     private bool isSprinting;
-    private Camera camera;
+    private new Camera camera;
     
 
     private void Start()
@@ -48,12 +47,12 @@ public class CharacterController : MonoBehaviour
             case  1:
                 transform.rotation = new Quaternion(0f, 180f, 0f, 1);
                 animator.SetInteger("Direction", 2);
-                directionFacing = 2;
+                DirectionFacingState = 2;
                 break;
             case -1:
                 transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 3);
-                directionFacing = 3;
+                DirectionFacingState = 3;
                 break;
         }
         // switch for setting the animator state for up and down directions,
@@ -62,12 +61,12 @@ public class CharacterController : MonoBehaviour
             case 1:
                 transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 1);
-                directionFacing = 1;
+                DirectionFacingState = 1;
                 break;
             case -1:
                 transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 0);
-                directionFacing = 0;
+                DirectionFacingState = 0;
                 break;
         }
 
@@ -78,10 +77,10 @@ public class CharacterController : MonoBehaviour
         switch (Input.GetKey(KeyCode.LeftShift) && directionOfTravel != Vector2.zero)
         {
             case false:
-                rb.velocity = movementSpeed * directionOfTravel * Time.deltaTime;
+                rb.velocity = movementSpeed * Time.deltaTime * directionOfTravel;
                 break;
             case true:
-                rb.velocity = sprintingSpeed * directionOfTravel * Time.deltaTime;
+                rb.velocity = sprintingSpeed * Time.deltaTime * directionOfTravel;
                 break;
         }
 
@@ -94,7 +93,7 @@ public class CharacterController : MonoBehaviour
             Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
             Vector2 directionToMouse = mousePos - (Vector2)arm.position;
             float angleToMouse = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg;
-            switch (directionFacing)
+            switch (DirectionFacingState)
             {
                 case 0:// up,
                     arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
@@ -129,6 +128,6 @@ public class CharacterController : MonoBehaviour
     }
     public int GetDirectionFacing()
     {
-        return directionFacing;
+        return DirectionFacingState;
     }
 }

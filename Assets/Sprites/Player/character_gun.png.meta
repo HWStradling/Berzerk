@@ -1,31 +1,31 @@
 fileFormatVersion: 2
-guid: 123d54a09b5e49a7b77ca17b4009834c
+guid: 7adb3002b143465ca80d83e1b71af788
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2181838360404834039
-    second: 001_rifle_0
+      213: 4334887192641962913
+    second: 001_gun_0
   - first:
-      213: 3292672510114225251
-    second: 001_rifle_1
+      213: 2563181447101769620
+    second: 001_gun_1
   - first:
-      213: 2219920971424934461
-    second: 001_rifle_2
+      213: -8393361946863388779
+    second: 001_gun_2
   - first:
-      213: 5026521850032956575
-    second: 001_rifle_3
+      213: 279068414970749635
+    second: 001_gun_3
   - first:
-      213: 8333481726314500824
-    second: rifle_0
+      213: -6628414004274166170
+    second: gun_0
   - first:
-      213: -2467041043869801362
-    second: rifle_1
+      213: -3058517067305430257
+    second: gun_1
   - first:
-      213: -8742243980035695331
-    second: rifle_2
+      213: -9025246451835624311
+    second: gun_2
   - first:
-      213: 351736906144962385
-    second: rifle_3
+      213: -6513206380828838369
+    second: gun_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -47,6 +47,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -55,9 +56,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -78,9 +79,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -135,7 +139,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: rifle_0
+      name: gun_0
       rect:
         serializedVersion: 2
         x: 0
@@ -149,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8d25f273a7976a370800000000000000
-      internalID: 8333481726314500824
+      spriteID: 666830bf4942304a0800000000000000
+      internalID: -6628414004274166170
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rifle_1
+      name: gun_1
       rect:
         serializedVersion: 2
         x: 360
@@ -170,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e64e4d5dd3f43cdd0800000000000000
-      internalID: -2467041043869801362
+      spriteID: f035ac79ee6fd85d0800000000000000
+      internalID: -3058517067305430257
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rifle_2
+      name: gun_2
       rect:
         serializedVersion: 2
         x: 720
@@ -191,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d1ddc262b6f4da680800000000000000
-      internalID: -8742243980035695331
+      spriteID: 984abfb7b22efb280800000000000000
+      internalID: -9025246451835624311
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rifle_3
+      name: gun_3
       rect:
         serializedVersion: 2
         x: 1080
@@ -212,8 +216,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1575a214ade91e400800000000000000
-      internalID: 351736906144962385
+      spriteID: f16b3e91e417c95a0800000000000000
+      internalID: -6513206380828838369
       vertices: []
       indices: 
       edges: []
