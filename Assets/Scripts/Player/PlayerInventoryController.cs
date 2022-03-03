@@ -6,7 +6,8 @@ public class PlayerInventoryController : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryUIItems;
     [SerializeField] private List<GameObject> inventory = new List<GameObject>();
-    private GameObject selectedItem;
+    private GameObject selectedItemObject;
+    private int selectedItem;
     private Animator animator;
 
     private void Start()
@@ -33,7 +34,7 @@ public class PlayerInventoryController : MonoBehaviour
 
     public GameObject GetSelectedItem()
     {
-        return selectedItem;
+        return selectedItemObject;
     }
 
     // checks if the item passed already exists in the players inventory,
@@ -89,6 +90,14 @@ public class PlayerInventoryController : MonoBehaviour
                 Debug.Log("unrecognised pickup");
                 break;
         }
+        foreach (GameObject element in inventoryUIItems)
+        {
+            element.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
+        inventoryUIItems[Mathf.Max(selectedItem - 1, 0)].GetComponent<SpriteRenderer>().color = Color.green;
+
+
     }
     private void UpdateItemSelection(int selection)
     {
@@ -100,9 +109,10 @@ public class PlayerInventoryController : MonoBehaviour
         {
             animator.SetInteger("Selected", selection);
 
-            selectedItem = inventory[Mathf.Max(selection - 1,0) ];
+            selectedItemObject = inventory[Mathf.Max(selection - 1,0) ];
+            selectedItem = selection;
 
-            Debug.Log(selectedItem.tag);
+            Debug.Log(selectedItemObject.tag);
             // update ui to highligh selected item,
             // update animator to display player with item sprites,
         }
