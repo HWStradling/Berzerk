@@ -4,20 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 public class HealthBarController : MonoBehaviour
 {
-    [SerializeField] private PlayerCombatController playerCombat;
-    [SerializeField] private EnemyCombatController enemyCombat;
-    [SerializeField] private Image healthBar;
-    // Update is called once per frame
-    void Update()
+
+    public void UpdateHealthBar(float fillAmount)
     {
-        if (playerCombat != null)
-        {
-            healthBar.fillAmount = playerCombat.playerCurrentHealth / playerCombat.playerMaxHealth;
-        }else if (enemyCombat != null)
-        {
-            healthBar.fillAmount = enemyCombat.enemyCurrentHealth / enemyCombat.enemyMaxHealth;
-        }
-        
+        Debug.Log("update health");
+        Debug.Log(fillAmount);
+        transform.localScale = new Vector3(fillAmount, 1, 1);
     }
 
 

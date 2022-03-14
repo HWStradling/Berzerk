@@ -37,6 +37,11 @@ public class BulletController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (Owner == null)
+        {
+            Debug.Log("Owner collision null");
+            return;
+        }
         if (collision.gameObject == null)
         {
             Debug.Log("collision target == null");
@@ -46,16 +51,16 @@ public class BulletController : MonoBehaviour
         {
             if (collision.CompareTag("Enemy"))
             {
-                EnemyCombatController enemyCC = collision.GetComponent<EnemyCombatController>();
-                enemyCC.ApplyDamage((float)Damage);
+                HealthController hC = collision.GetComponent<HealthController>();
+                hC.ApplyDamage((float)Damage);
                 // bullet impact animation,
                 Destroy(gameObject);
 
             }
             if (collision.CompareTag("Player"))
             {
-                PlayerCombatController playerCC = collision.GetComponent<PlayerCombatController>();
-                playerCC.ApplyDamage((float)Damage);
+                HealthController hC = collision.GetComponent<HealthController>();
+                hC.ApplyDamage((float)Damage);
                 Destroy(gameObject);
             }
             if (collision.CompareTag("Wall"))

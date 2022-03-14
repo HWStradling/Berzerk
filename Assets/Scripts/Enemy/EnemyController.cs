@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyController : MonoBehaviour
 {
@@ -16,15 +17,20 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Transform[] patrolPattern;// array of preset patrol waypoint transform objects,
 
     [SerializeField] public int enemyType;
-    public bool attackState { get; private set; } = false;
+    [SerializeField] UnityEvent<bool> OnAttacking;
+    private bool attackState = false;
     public int DirectionFacingState { get; private set; } = 0;
 
 
 
     private int currentWaypoint = 0;
+    Vector2 enemyOrigin;
+    Vector2 targetOrigin;
+    Vector2 directionToTarget;
+    float distanceToTarget;
 
-    
-     
+
+
 
     void Start()
     {
@@ -37,22 +43,12 @@ public class EnemyController : MonoBehaviour
         if (player != null)
         {
             if (IsPlayerVisible() && enemyType > 0)
-            {
-                attackState = true;
                 FollowPlayer();
-
-            }
             else
-            {
-                attackState = false;
                 FollowPatrolRoute();
-            }
         }
         else
-        {
-            attackState = false;
             FollowPatrolRoute();
-        }
 
     }
          
@@ -60,37 +56,35 @@ public class EnemyController : MonoBehaviour
     //checks if the player is visible to the enemy, returns true if player is visible, false if not visible.
     bool IsPlayerVisible()
     {
-        Vector2 enemyOrigin = rb.position;
-        Vector2 playerOrigin = player.position;
-        Vector2 directionToPlayer = (playerOrigin - enemyOrigin).normalized;
-        float distanceToPlayer = Vector2.Distance(playerOrigin, enemyOrigin);
+        SetDirDist(player);
 
         // cast a ray in the direction of the player at for the exact distance the player is from the enemy,
-         RaycastHit2D wallRay = Physics2D.Raycast(enemyOrigin, directionToPlayer, distanceToPlayer, WallLayer);
+        RaycastHit2D wallRay = Physics2D.Raycast(enemyOrigin, directionToTarget, distanceToTarget, WallLayer);
 
         // if the ray does not collide with a wall the player must be visible.
         if (wallRay.collider == null)
         {
-            return true;
+            attackState = true;
+            OnAttacking?.Invoke(attackState);
+            return attackState;
         }
 
 
         // if the ray collides with the wall, the player cannot be visible to the enemy,
         attackState = false;
-        return false;
+        OnAttacking?.Invoke(attackState);
+        return attackState;
     }
 
     // moves the enemy towards the player at the follow speed.
     void FollowPlayer()
     {
-        Vector2 enemyOrigin = rb.position;
-        Vector2 playerOrigin = player.position;
-        Vector2 directionToPlayer = (playerOrigin - enemyOrigin).normalized;
+        SetDirDist(player);
 
         // follows player then stops when the enemy has reached the player
-        if (Vector2.Distance(playerOrigin, enemyOrigin) > 1.5)
+        if (Vector2.Distance(targetOrigin, enemyOrigin) > 1.5)
         {
-            rb.velocity = directionToPlayer * followSpeed * Time.fixedDeltaTime;
+            rb.velocity = followSpeed * Time.fixedDeltaTime * directionToTarget;
             UpdateAnimation();         
         }
         else
@@ -105,12 +99,9 @@ public class EnemyController : MonoBehaviour
     // reshuffles the patrol pattern if the enemy has completed it,
     void FollowPatrolRoute()
     {
-        Vector2 enemyOrigin = rb.position;
-        Vector2 waypointOrigin = patrolPattern[currentWaypoint].position;
-        Vector2 directionToWaypoint = (waypointOrigin - enemyOrigin).normalized;
-        float distanceToWaypoint = Vector2.Distance(waypointOrigin, enemyOrigin);
+        SetDirDist(patrolPattern[currentWaypoint]);
 
-        if (distanceToWaypoint < 1) //  if enemy has reached current waypoint,
+        if (distanceToTarget < 1) //  if enemy has reached current waypoint,
         {
             if (currentWaypoint == patrolPattern.Length - 1) //  if enemy has reached the end of the patrol pattern,
             {
@@ -127,14 +118,14 @@ public class EnemyController : MonoBehaviour
         }
         else // enemy not at current waypoint,
         {
-            if (distanceToWaypoint < 1.5)// slows down enemy if near current waypoint,
+            if (distanceToTarget < 1.5)// slows down enemy if near current waypoint,
             {
-                rb.velocity = directionToWaypoint * transitionSpeed * Time.deltaTime;
+                rb.velocity = Time.deltaTime * transitionSpeed * directionToTarget;
                 UpdateAnimation();
             }
             else
             {  // moves enemy towards current waypoint,
-                rb.velocity = directionToWaypoint * patrolSpeed * Time.deltaTime;
+                rb.velocity = patrolSpeed * Time.deltaTime * directionToTarget;
                 UpdateAnimation();
             }
         }
@@ -156,7 +147,6 @@ public class EnemyController : MonoBehaviour
     {
         for (var i = patrolPattern.Length - 1; i > 0; i--)
         {
-             
             var rand = Random.Range(0, i);
             var temp = patrolPattern[i];
             patrolPattern[i] = patrolPattern[rand];
@@ -164,7 +154,7 @@ public class EnemyController : MonoBehaviour
         }
 
     }
-    void UpdateAnimation()
+     private void UpdateAnimation()
     { 
         if (Mathf.Abs(rb.velocity.y) > Mathf.Abs(rb.velocity.x))
         {
@@ -200,5 +190,11 @@ public class EnemyController : MonoBehaviour
 
 }
 
-    
+    private void SetDirDist(Transform target)
+    {
+        enemyOrigin = rb.position;
+        targetOrigin = target.position;
+        directionToTarget = (targetOrigin - enemyOrigin).normalized;
+        distanceToTarget = Vector2.Distance(targetOrigin, enemyOrigin);
+    }
 }

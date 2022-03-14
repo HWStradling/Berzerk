@@ -5,9 +5,9 @@ using UnityEngine;
 public class EnemyCombatController : MonoBehaviour
 {
     // state/type variables
-    private bool attackState;
+    [SerializeField] private bool attackState = false;
     private int enemyType;
-    private bool allowAttackState = true;
+    private bool attackDelayed = false;
     public int directionFacingState;
     
 
@@ -15,11 +15,6 @@ public class EnemyCombatController : MonoBehaviour
     [SerializeField] private float eType1AttackDelay;
     [SerializeField] private float eType1BulletSpeed;
     [SerializeField] private float eType1BulletDamage;
-
-
-    // health variables
-    public float enemyCurrentHealth { get; private set; }
-    public float enemyMaxHealth { get; private set; } = 100;
 
     // references
     [SerializeField] private GameObject[] bulletPrefabArray;
@@ -31,16 +26,14 @@ public class EnemyCombatController : MonoBehaviour
     {
         enemyType = gameObject.GetComponent<EnemyController>().enemyType;
         directionFacingState = gameObject.GetComponent<EnemyController>().DirectionFacingState;
-        enemyCurrentHealth = 100f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        attackState = gameObject.GetComponent<EnemyController>().attackState;
         directionFacingState = gameObject.GetComponent<EnemyController>().DirectionFacingState;
 
-        if (attackState && enemyType > 0 && allowAttackState)
+        if (attackState && enemyType > 0 && attackDelayed == false)
         {
             switch (enemyType) // different enemy type attacks,
             {
@@ -61,8 +54,14 @@ public class EnemyCombatController : MonoBehaviour
     {
         GameObject bullet;
         BulletController bC;
-        allowAttackState = false;
+        attackDelayed = true;
         yield return new WaitForSeconds(eType1AttackDelay);
+        if (player == null)
+        {
+            yield break;
+        }
+            
+        
         Vector2 directionToPlayer = player.position - firepoint.position;
         float angleToPlayer = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
         switch (directionFacingState)
@@ -94,25 +93,11 @@ public class EnemyCombatController : MonoBehaviour
             default:
                 break;
         }
-        allowAttackState = true;
+        attackDelayed = false;
     }
-    public void ApplyDamage(float damage)
+  
+    public void SetAttackState(bool state)
     {
-        Debug.Log("apply Damage");
-        if (enemyCurrentHealth - damage <= 0)
-        {
-            enemyCurrentHealth = 0;
-            Die();
-        }
-        else
-        {
-            enemyCurrentHealth -= damage;
-            // play damage animation
-        }
-    }
-    private void Die()
-    {
-        // death animation,
-        Destroy(gameObject);
+        attackState = state;
     }
 }

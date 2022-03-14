@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
             Vector2 directionToMouse = mousePos - (Vector2)arm.position;
             float angleToMouse = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg;
-            switch (DirectionFacingState)
+            switch (DirectionFacingState)// TODO: make directionfacingstate an enum.
             {
                 case 0:// up,
                     arm.localRotation = Quaternion.Euler(0f, 0f, 0f);

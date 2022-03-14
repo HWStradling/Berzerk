@@ -14,12 +14,7 @@ public class PlayerCombatController : MonoBehaviour
     // state variables
     private WeaponType selectedWeapon = WeaponType.None;
     private int directionFacingState;
-    private bool allowAttackState =  true;
-
-    // health variables
-    public float playerCurrentHealth { get; private set; }
-    public float playerMaxHealth { get; private set; } = 100;
-    private bool allowGradualHeal = true;
+    private bool attackDelayed =  false;
 
     //bullet prefabs to instantiate and weapon container to activate to display selected weapon,
     [SerializeField] private GameObject[] bulletPrefabArray;
@@ -35,7 +30,6 @@ public class PlayerCombatController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerCurrentHealth = playerMaxHealth;
         directionFacingState = gameObject.GetComponent<PlayerController>().DirectionFacingState;
     }
 
@@ -53,7 +47,7 @@ public class PlayerCombatController : MonoBehaviour
     private void AttackSequence()
     {
         SetSelectedWeapon();
-        if (selectedWeapon != WeaponType.None && allowAttackState == true)
+        if (selectedWeapon != WeaponType.None && attackDelayed == false)
         {
             switch (selectedWeapon)
             {
@@ -97,9 +91,9 @@ public class PlayerCombatController : MonoBehaviour
             default:
                 break;
         }
-        allowAttackState = false;
+        attackDelayed = true;
         yield return new WaitForSeconds(bulletDelay);
-        allowAttackState = true;
+        attackDelayed = false;
     }
     private void RifleAttack()
     {
@@ -126,33 +120,5 @@ public class PlayerCombatController : MonoBehaviour
         }
         Debug.Log("non weapon selected");
         this.selectedWeapon = WeaponType.None;
-    }
-    public void ApplyDamage(float damage)
-    {
-        if (playerCurrentHealth - damage <= 0)
-        {
-            allowGradualHeal = false;
-            playerCurrentHealth = 0;
-            Die();
-        }
-        else
-        {
-            playerCurrentHealth -= damage;
-            // play damage animation
-        }
-    }
-    private void GradualHeal()
-    {
-        // ienumerator tics heal increase on set duration.
-    }
-    public void SetPlayerMaxHealth(float newMaxHealth)
-    {
-        playerMaxHealth = newMaxHealth;
-    }
-    private void Die()
-    {
-        // play death animation,
-        // load death scene;
-        Destroy(gameObject);
     }
 }
