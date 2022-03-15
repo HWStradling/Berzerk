@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class PlayerCombatController : MonoBehaviour
 {
-    enum WeaponType
-    {
-        None,// default value for no weapon or non weapon item equiped,
-        BasicGun,
-        Rifle
-    }
-
     // state variables
-    private WeaponType selectedWeapon = WeaponType.None;
-    private int directionFacingState;
+    private GameObject selectedWeapon;
+    private int directionFacing;
     private bool attackDelayed =  false;
+
+    //gun rotation variables
+    [SerializeField] private Transform arm;
+    [SerializeField] private Transform weaponHandle;
+    private new Camera camera;
+    [SerializeField] private float aimingArc;
 
     //bullet prefabs to instantiate and weapon container to activate to display selected weapon,
     [SerializeField] private GameObject[] bulletPrefabArray;
@@ -30,31 +29,32 @@ public class PlayerCombatController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        directionFacingState = gameObject.GetComponent<PlayerController>().DirectionFacingState;
+        camera = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && WeaponContainer.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && selectedWeapon != null)
         {
-            directionFacingState = gameObject.GetComponent<PlayerController>().DirectionFacingState;
-           
             AttackSequence();
-           
         }
+    }
+    private void FixedUpdate()
+    {
+        UpdateGunRotation();
     }
     private void AttackSequence()
     {
-        SetSelectedWeapon();
-        if (selectedWeapon != WeaponType.None && attackDelayed == false)
+        
+        if (attackDelayed == false)
         {
-            switch (selectedWeapon)
+            switch (selectedWeapon.name)
             {
-                case WeaponType.BasicGun:
+                case "basic_gun":
                     StartCoroutine(BasicGunAttack());
                     break;
-                case WeaponType.Rifle:
+                case "rifle":
                     RifleAttack();
                     break;
                 default:
@@ -64,10 +64,14 @@ public class PlayerCombatController : MonoBehaviour
     }
     IEnumerator BasicGunAttack()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            yield break;
+        }
         Transform firepoint;
         GameObject bullet;
         BulletController bC;
-        switch (directionFacingState)
+        switch (directionFacing)
         {
             case 0:
                 firepoint = basicGunFiringPoints[0];
@@ -97,28 +101,74 @@ public class PlayerCombatController : MonoBehaviour
     }
     private void RifleAttack()
     {
-        // to implement !!!
+        throw new System.NotImplementedException();
     }
-    private void SetSelectedWeapon() //TODO: put in inventory controller.
+    public void UpdateDirectionFacing(int newDirectionFacing)
     {
-        
-        GameObject selectedItem = gameObject.GetComponent<PlayerInventoryController>().GetSelectedItem();
-        if (selectedItem.CompareTag("Weapon"))
+        directionFacing = newDirectionFacing;
+    }
+    public void UpdateSelectedWeapon(GameObject newSelectedItem)
+    {
+        if (newSelectedItem == null)
         {
-            switch (selectedItem.name)
+            selectedWeapon = newSelectedItem;
+            return;
+        }
+        if (newSelectedItem.CompareTag("Weapon"))
+        {
+            selectedWeapon = newSelectedItem;
+        }
+    }
+
+    private void UpdateGunRotation()
+    {
+        if (arm.gameObject.activeSelf || weaponHandle.gameObject.activeSelf)
+        {
+            Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 directionToMouse = mousePos - (Vector2)arm.position;
+            float angleToMouse = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg;
+            switch (directionFacing)// TODO: make directionfacingstate an enum.
             {
-                case "basic_gun":
-                    this.selectedWeapon = WeaponType.BasicGun;
+                case 0:// up,
+                    arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    if (Mathf.Clamp(angleToMouse, -90 - aimingArc, -90 + aimingArc) != angleToMouse)
+                        return;
+
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, angleToMouse + 90); // use different method !!!
                     return;
-                case "rifle":
-                    this.selectedWeapon = WeaponType.Rifle;
+                case 1: //up
+                    arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    if (Mathf.Clamp(angleToMouse, 90 - aimingArc, 90 + aimingArc) != angleToMouse)
+                        return;
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, angleToMouse - 90);
                     return;
+                case 2:// right flip,
+                    if (Mathf.Clamp(angleToMouse, -aimingArc, aimingArc) != angleToMouse)
+                        return;
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    arm.localRotation = Quaternion.Euler(0f, 0f, -angleToMouse);
+                    break;
+                case 3: // left,
+
+                    if (angleToMouse > 0)
+                    {
+                        if (angleToMouse != Mathf.Clamp(angleToMouse, 180 - aimingArc, 180))
+                            return;
+                        weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        arm.localRotation = Quaternion.Euler(0f, 0f, angleToMouse - 180);
+                    }
+                    if (angleToMouse < 0)
+                    {
+                        if (angleToMouse != Mathf.Clamp(angleToMouse, -180, -180 + aimingArc))
+                            return;
+                        weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        arm.localRotation = Quaternion.Euler(0f, 0f, angleToMouse + 180);
+                    }
+                    break;
                 default:
-                    Debug.Log("weapon name unrecognised");
-                    return;
+                    break;
             }
         }
-        Debug.Log("non weapon selected");
-        this.selectedWeapon = WeaponType.None;
+
     }
 }

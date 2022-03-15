@@ -11,6 +11,7 @@ TagManager:
   - Weapon
   - basic_gun_arm
   - Wall
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

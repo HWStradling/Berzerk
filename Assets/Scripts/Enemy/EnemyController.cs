@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class EnemyController : MonoBehaviour
 {
 
-    [SerializeField] private Transform player;
+    [SerializeField] private Transform targetTransform;
     [SerializeField] private LayerMask WallLayer; // layer containing the wall's tilemap,
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
@@ -40,13 +40,8 @@ public class EnemyController : MonoBehaviour
     void FixedUpdate()
     {
         // follows the player if visible, patrols if not visible.
-        if (player != null)
-        {
-            if (IsPlayerVisible() && enemyType > 0)
-                FollowPlayer();
-            else
-                FollowPatrolRoute();
-        }
+        if (IsTargetVisible() && enemyType > 0)
+            FollowTarget();
         else
             FollowPatrolRoute();
 
@@ -54,15 +49,15 @@ public class EnemyController : MonoBehaviour
          
     
     //checks if the player is visible to the enemy, returns true if player is visible, false if not visible.
-    bool IsPlayerVisible()
+    bool IsTargetVisible()
     {
-        SetDirDist(player);
+        SetDirDist(targetTransform);
 
         // cast a ray in the direction of the player at for the exact distance the player is from the enemy,
         RaycastHit2D wallRay = Physics2D.Raycast(enemyOrigin, directionToTarget, distanceToTarget, WallLayer);
 
         // if the ray does not collide with a wall the player must be visible.
-        if (wallRay.collider == null)
+        if (wallRay.collider == null && targetTransform.gameObject.activeInHierarchy)
         {
             attackState = true;
             OnAttacking?.Invoke(attackState);
@@ -77,9 +72,9 @@ public class EnemyController : MonoBehaviour
     }
 
     // moves the enemy towards the player at the follow speed.
-    void FollowPlayer()
+    void FollowTarget()
     {
-        SetDirDist(player);
+        SetDirDist(targetTransform);
 
         // follows player then stops when the enemy has reached the player
         if (Vector2.Distance(targetOrigin, enemyOrigin) > 1.5)

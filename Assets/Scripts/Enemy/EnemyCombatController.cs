@@ -18,8 +18,7 @@ public class EnemyCombatController : MonoBehaviour
 
     // references
     [SerializeField] private GameObject[] bulletPrefabArray;
-    [SerializeField] private Transform player;
-    [SerializeField] private PlayerCombatController playerCombatController;
+    [SerializeField] private Transform target;
     [SerializeField] private Transform firepoint;
  
     void Start()
@@ -56,13 +55,13 @@ public class EnemyCombatController : MonoBehaviour
         BulletController bC;
         attackDelayed = true;
         yield return new WaitForSeconds(eType1AttackDelay);
-        if (player == null)
+        if (!target.gameObject.activeInHierarchy)
         {
             yield break;
         }
             
         
-        Vector2 directionToPlayer = player.position - firepoint.position;
+        Vector2 directionToPlayer = target.position - firepoint.position;
         float angleToPlayer = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
         switch (directionFacingState)
         {
@@ -98,6 +97,7 @@ public class EnemyCombatController : MonoBehaviour
   
     public void SetAttackState(bool state)
     {
+        Debug.Log(state);
         attackState = state;
     }
 }

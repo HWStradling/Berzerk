@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerInventoryController : MonoBehaviour
 {
-    [SerializeField] private GameObject[] inventoryUIItems;
     [SerializeField] private List<GameObject> inventory = new List<GameObject>();
+    [SerializeField] UnityEvent<GameObject> OnChangeSelectedItem;
+    [SerializeField] UnityEvent<GameObject> OnAddItemToInventory;
     private GameObject selectedItemObject;
-    private int selectedItem;
     private Animator animator;
 
     private void Start()
@@ -18,23 +19,14 @@ public class PlayerInventoryController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            UpdateItemSelection(1);
+            TryUpdateItemSelection(1);
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            UpdateItemSelection(0);
+            TryUpdateItemSelection(0);
         }
 
-    }
-    public List<GameObject> GetInventory()
-    {
-        return inventory;
-    }
-
-    public GameObject GetSelectedItem()
-    {
-        return selectedItemObject;
     }
 
     // checks if the item passed already exists in the players inventory,
@@ -47,14 +39,10 @@ public class PlayerInventoryController : MonoBehaviour
         {
             inventory.ForEach(delegate (GameObject item) // foreach item in the inventory
             {
-                if (item.tag == Checkitem.tag) // if item already exists in inventory break out of the foreach,
-                {
+                if (Checkitem.CompareTag(item.tag)) // if item already exists in inventory break out of the foreach,
                     return;
-                }
                 else
-                {
                     hasItem = false; // item not already in inventory,
-                }
             });
         }
         else
@@ -74,47 +62,29 @@ public class PlayerInventoryController : MonoBehaviour
         else // adds item to inventory and makes call to update inventory UI,
         {
             inventory.Add(itemToAdd);
-            UpdateInventoryUI(itemToAdd);
+            OnAddItemToInventory?.Invoke(itemToAdd); // event for add item to inventory
             return true;
         }
     }
-
-    private void UpdateInventoryUI(GameObject item)
-    {
-        switch (item.name) // checks item tag against available Inventory UI Icons, and sets active if equal;
-        {
-            case "basic_gun":
-                inventoryUIItems[0].SetActive(true);
-                return;
-            default:
-                Debug.Log("unrecognised pickup");
-                break;
-        }
-        foreach (GameObject element in inventoryUIItems)
-        {
-            element.GetComponent<SpriteRenderer>().color = Color.white;
-        }
-
-        inventoryUIItems[Mathf.Max(selectedItem - 1, 0)].GetComponent<SpriteRenderer>().color = Color.green;
-
-
-    }
-    private void UpdateItemSelection(int selection)
+    private void TryUpdateItemSelection(int selection)
     {
         if (inventory.Count == 0)
         {
             return;
         }
+        else if (selection == 0)
+        {
+            selectedItemObject = null;
+            OnChangeSelectedItem?.Invoke(null);
+            animator.SetInteger("Selected", selection);
+        }
         else if (selection >= inventory.Count -1)
         {
             animator.SetInteger("Selected", selection);
-
             selectedItemObject = inventory[Mathf.Max(selection - 1,0) ];
-            selectedItem = selection;
 
+            OnChangeSelectedItem?.Invoke(selectedItemObject); //event for item selection changed,
             Debug.Log(selectedItemObject.tag);
-            // update ui to highligh selected item,
-            // update animator to display player with item sprites,
         }
     }
 

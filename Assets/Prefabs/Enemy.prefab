@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c3958c9279d72746b80abac82762239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  targetTransform: {fileID: 0}
   WallLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -286,8 +286,7 @@ MonoBehaviour:
   eType1BulletSpeed: 0
   eType1BulletDamage: 0
   bulletPrefabArray: []
-  player: {fileID: 0}
-  playerCombatController: {fileID: 0}
+  target: {fileID: 0}
   firepoint: {fileID: 0}
 --- !u!114 &8368132932622435621
 MonoBehaviour:
@@ -301,23 +300,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4019198563bf2464cbf43d9e9899972c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentHealth: 0
-  MaxHealth: 0
-  OnDamaged:
+  currentHealth: 0
+  maxHealth: 100
+  maxLives: 1
+  OnHealthChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 101604987801295074}
+        m_TargetAssemblyTypeName: HealthBarController, Assembly-CSharp
+        m_MethodName: UpdateHealthBar
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnLivesChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeathRespawn:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2278664967385040220
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4adaab13e245be24a93301b67245451c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 0}
 --- !u!212 &4096833431305382772
 SpriteRenderer:
   m_ObjectHideFlags: 0
