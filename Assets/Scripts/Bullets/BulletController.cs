@@ -8,10 +8,12 @@ public class BulletController : MonoBehaviour
     public float ?BulletSpeed { private get; set; }
     public int ?Direction { private get; set; } // 0 down, 1 up, 2 or 3 side.
     public float ?Damage { private get; set; }
+    private string ownerTag;
 
     public GameObject Owner { private get; set; }
     private void Start()
     {
+        ownerTag = Owner.tag;
         rb = gameObject.GetComponent<Rigidbody2D>();
         if (Direction == null || Damage == null || Owner == null)
         {
@@ -37,17 +39,14 @@ public class BulletController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (Owner == null)
-        {
-            Debug.Log("Owner collision null");
-            return;
-        }
+ 
         if (collision.gameObject == null)
         {
             Debug.Log("collision target == null");
             return;
         }
-        if (!Owner.CompareTag(collision.tag))
+ 
+        if (!collision.CompareTag(ownerTag))
         {
             if (collision.CompareTag("Enemy"))
             {

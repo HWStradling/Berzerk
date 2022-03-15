@@ -97,27 +97,38 @@ public class PlayerController : MonoBehaviour
             {
                 case 0:// up,
                     arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, - 90 - aimingArc, -90 + aimingArc) + 90); // use different method !!!
+                    if (Mathf.Clamp(angleToMouse, -90 - aimingArc, -90 + aimingArc) != angleToMouse)
+                        return;
+                    
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, angleToMouse + 90); // use different method !!!
                     return;
                 case 1: //up
                     arm.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse,  90 - aimingArc, 90 + aimingArc) -90);
+                    if (Mathf.Clamp(angleToMouse, 90 - aimingArc, 90 + aimingArc) != angleToMouse)
+                        return;
+                    weaponHandle.localRotation = Quaternion.Euler(0f, 0f, angleToMouse -90);
                     return;
                 case 2:// right flip,
+                    if (Mathf.Clamp(angleToMouse, -aimingArc, aimingArc) != angleToMouse)
+                        return;
                     weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                    arm.localRotation = Quaternion.Euler(0f, 0f, - Mathf.Clamp(angleToMouse, -aimingArc, aimingArc));
+                    arm.localRotation = Quaternion.Euler(0f, 0f, -angleToMouse);
                     break;
                 case 3: // left,
 
                     if (angleToMouse > 0)
                     {
+                        if (angleToMouse != Mathf.Clamp(angleToMouse, 180 - aimingArc, 180))
+                            return;
                         weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                        arm.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, 180 - aimingArc, 180) -180 );
+                        arm.localRotation = Quaternion.Euler(0f, 0f, angleToMouse - 180 );
                     }
                     if (angleToMouse < 0)
                     {
+                        if (angleToMouse != Mathf.Clamp(angleToMouse, -180, -180 + aimingArc))
+                            return;
                         weaponHandle.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                        arm.localRotation = Quaternion.Euler(0f, 0f, Mathf.Clamp(angleToMouse, -180 , -180 + aimingArc ) + 180);
+                        arm.localRotation = Quaternion.Euler(0f, 0f, angleToMouse + 180);
                     }
                     break;
                 default:

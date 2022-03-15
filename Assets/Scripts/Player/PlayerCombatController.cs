@@ -99,7 +99,7 @@ public class PlayerCombatController : MonoBehaviour
     {
         // to implement !!!
     }
-    private void SetSelectedWeapon()
+    private void SetSelectedWeapon() //TODO: put in inventory controller.
     {
         
         GameObject selectedItem = gameObject.GetComponent<PlayerInventoryController>().GetSelectedItem();

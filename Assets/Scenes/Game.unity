@@ -4226,7 +4226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 80
   sprintingSpeed: 150
-  aimingArc: 90
+  aimingArc: 85
   arm: {fileID: 1876641566}
   weaponHandle: {fileID: 941525902}
 --- !u!58 &494967391
@@ -4350,12 +4350,12 @@ PrefabInstance:
     - target: {fileID: 5793698317849116309, guid: 0a48c480a8dca3343b2dbbc631eb0f3a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.18
+      value: 26.17
       objectReference: {fileID: 0}
     - target: {fileID: 5793698317849116309, guid: 0a48c480a8dca3343b2dbbc631eb0f3a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.11
+      value: 6.83
       objectReference: {fileID: 0}
     - target: {fileID: 5793698317849116309, guid: 0a48c480a8dca3343b2dbbc631eb0f3a,
         type: 3}
@@ -5477,7 +5477,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213184866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.130079, y: -1.8104901, z: -48.767487}
+  m_LocalPosition: {x: 9.1, y: -1.88, z: -48.767487}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1548059337}
@@ -26564,12 +26564,12 @@ PrefabInstance:
     - target: {fileID: 1660559140209058470, guid: 039676116e76d5f4eb9313fad055663e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.59
+      value: 9.5
       objectReference: {fileID: 0}
     - target: {fileID: 1660559140209058470, guid: 039676116e76d5f4eb9313fad055663e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.36
+      value: 7.99
       objectReference: {fileID: 0}
     - target: {fileID: 7063796829237455488, guid: 039676116e76d5f4eb9313fad055663e,
         type: 3}
