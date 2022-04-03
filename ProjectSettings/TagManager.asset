@@ -11,7 +11,11 @@ TagManager:
   - Weapon
   - basic_gun_arm
   - Wall
-  - SpawnPoint
+  - next_level
+  - previous_level
+  - spawn_point
+  - v_cam
+  - m_cam
   layers:
   - Default
   - TransparentFX

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class EnemyController : MonoBehaviour
 {
 
-    [SerializeField] private Transform targetTransform;
+    private Transform targetTransform;
     [SerializeField] private LayerMask WallLayer; // layer containing the wall's tilemap,
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
@@ -34,17 +34,23 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
+        if (GameObject.FindGameObjectsWithTag("Player") != null)
+        {
+            targetTransform = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+        }
         ShufflePatrolPattern();
     }
 
     void FixedUpdate()
     {
         // follows the player if visible, patrols if not visible.
-        if (IsTargetVisible() && enemyType > 0)
-            FollowTarget();
-        else
-            FollowPatrolRoute();
-
+        if (targetTransform != null)
+        {
+            if (IsTargetVisible() && enemyType > 0)
+                FollowTarget();
+            else
+                FollowPatrolRoute();
+        }
     }
          
     

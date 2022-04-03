@@ -27,9 +27,13 @@ public class PlayerCombatController : MonoBehaviour
 
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        
+    }
     void Start()
     {
-        camera = Camera.main;
+        camera = GameObject.FindGameObjectsWithTag("m_cam")[0].GetComponent<Camera>();
     }
 
     // Update is called once per frame

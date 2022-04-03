@@ -17,7 +17,7 @@ public class HealthController : MonoBehaviour, IAttackable
     [SerializeField] UnityEvent<float> OnHealthChanged;
     [SerializeField] UnityEvent<int> OnLivesChanged;
     [SerializeField] UnityEvent OnDeathRespawn;
-    [SerializeField] UnityEvent OnDeath;
+    [SerializeField] UnityEvent OnDeathFinal;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +29,7 @@ public class HealthController : MonoBehaviour, IAttackable
     // Update is called once per frame
     void FixedUpdate()
     {
-        //GradualHeal();
+            //GradualHeal();
     }
 
     public void ApplyDamage(float damage)
@@ -54,7 +54,7 @@ public class HealthController : MonoBehaviour, IAttackable
     {
         if (gameObject.CompareTag("Enemy"))
         {
-            OnDeath?.Invoke();
+            OnDeathFinal?.Invoke();
             gameObject.SetActive(false);
         }
         else if (gameObject.CompareTag("Player"))
@@ -62,8 +62,7 @@ public class HealthController : MonoBehaviour, IAttackable
             switch (remainingLives-1)
             {
                 case 0:
-                    OnDeath?.Invoke();
-                    gameObject.SetActive(false);
+                    OnDeathFinal?.Invoke();
                     break;
                 default:
                     Respawn();

@@ -18,11 +18,15 @@ public class EnemyCombatController : MonoBehaviour
 
     // references
     [SerializeField] private GameObject[] bulletPrefabArray;
-    [SerializeField] private Transform target;
+    private Transform targetTransform;
     [SerializeField] private Transform firepoint;
  
     void Start()
     {
+        if (GameObject.FindGameObjectsWithTag("Player") != null)
+        {
+            targetTransform = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+        }
         enemyType = gameObject.GetComponent<EnemyController>().enemyType;
         directionFacingState = gameObject.GetComponent<EnemyController>().DirectionFacingState;
     }
@@ -32,7 +36,7 @@ public class EnemyCombatController : MonoBehaviour
     {
         directionFacingState = gameObject.GetComponent<EnemyController>().DirectionFacingState;
 
-        if (attackState && enemyType > 0 && attackDelayed == false)
+        if (attackState && enemyType > 0 && attackDelayed == false && targetTransform!= null)
         {
             switch (enemyType) // different enemy type attacks,
             {
@@ -55,13 +59,13 @@ public class EnemyCombatController : MonoBehaviour
         BulletController bC;
         attackDelayed = true;
         yield return new WaitForSeconds(eType1AttackDelay);
-        if (!target.gameObject.activeInHierarchy)
+        if (!targetTransform.gameObject.activeInHierarchy)
         {
             yield break;
         }
             
         
-        Vector2 directionToPlayer = target.position - firepoint.position;
+        Vector2 directionToPlayer = targetTransform.position - firepoint.position;
         float angleToPlayer = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
         switch (directionFacingState)
         {
@@ -97,7 +101,7 @@ public class EnemyCombatController : MonoBehaviour
   
     public void SetAttackState(bool state)
     {
-        Debug.Log(state);
+        Debug.Log("Enemy Attack State: " + state);
         attackState = state;
     }
 }

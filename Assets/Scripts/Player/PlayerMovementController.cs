@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+
 public class PlayerMovementController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
@@ -26,10 +28,24 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Start()
     {
-        Spawn();
+        MoveToSpawnPoint();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+    }
+    /*private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }*/
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        MoveToSpawnPoint();
     }
 
     private void Update()
@@ -43,6 +59,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        bool directionChanged = false;
         isSprinting = Input.GetKey(KeyCode.LeftShift) && directionOfTravel != Vector2.zero;
         // switch for setting the animator state for left and right directions,
         switch (directionOfTravel.x)
@@ -51,11 +68,13 @@ public class PlayerMovementController : MonoBehaviour
                 transform.rotation = new Quaternion(0f, 180f, 0f, 1);
                 animator.SetInteger("Direction", 2);
                 directionFacingState = 2;
+                directionChanged = true;
                 break;
             case -1:
                 transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 3);
                 directionFacingState = 3;
+                directionChanged = true;
                 break;
         }
         // switch for setting the animator state for up and down directions,
@@ -65,15 +84,23 @@ public class PlayerMovementController : MonoBehaviour
                 transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 1);
                 directionFacingState = 1;
+                directionChanged = true;
                 break;
             case -1:
                 transform.rotation = new Quaternion(0f, 0f, 0f, 1);
                 animator.SetInteger("Direction", 0);
                 directionFacingState = 0;
+                directionChanged = true;
                 break;
         }
 
-        OnDirectionChange?.Invoke(directionFacingState);
+        if (directionChanged) // for efficiency
+        {
+            OnDirectionChange?.Invoke(directionFacingState);
+            directionChanged = false;
+        }
+
+        
 
         // updating the animator with the correct parameters for Walking and Sprinting,
         animator.SetBool("Walking", directionOfTravel.y != 0 || directionOfTravel.x != 0);
@@ -89,9 +116,40 @@ public class PlayerMovementController : MonoBehaviour
                 break;
         }
     }
-    public void Spawn()
+    public void MoveToSpawnPoint()
     {
-        Transform spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint").transform;
-        transform.position = spawnPoint.position;
+        Transform spawnPoint = GameObject.FindGameObjectWithTag("spawn_point").transform;
+        if (spawnPoint == null)
+        {
+            Debug.Log("spawnPoint null");
+        }
+        else
+        {
+            transform.position = spawnPoint.position;
+        } 
+    }
+    public void onDeathFinal()
+    {
+        gameObject.SetActive(false);
+    }
+    private void NextScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+    private void PreviousScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("next_level"))
+        {
+            Invoke(nameof(NextScene), 3.0f);
+        }
+        else if (collision.CompareTag("previous_level"))
+        {
+            Invoke(nameof(PreviousScene), 3.0f);
+        }
     }
 }
