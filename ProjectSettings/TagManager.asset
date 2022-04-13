@@ -17,6 +17,8 @@ TagManager:
   - v_cam
   - m_cam
   - ui
+  - acheivment_text
+  - acheivment_container
   layers:
   - Default
   - TransparentFX

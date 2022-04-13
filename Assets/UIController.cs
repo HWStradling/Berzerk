@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UIController : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventoryUIItems;
+    [SerializeField] UnityEvent<int> newItemAcheivment;
     // Start is called before the first frame update
 
     public void EnableUIElement(string item)
@@ -13,6 +15,7 @@ public class UIController : MonoBehaviour
         switch (item) // checks item tag against available  UI Icons, and sets active if equal;
         {
             case "basic_gun":
+                newItemAcheivment?.Invoke(0);
                 inventoryUIItems[0].SetActive(true);
                 return;
             default:

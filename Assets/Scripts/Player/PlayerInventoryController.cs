@@ -25,6 +25,11 @@ public class PlayerInventoryController : MonoBehaviour
         {
             TryUpdateItemSelection("empty");
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            TryUpdateItemSelection("rifle");
+
+        }
 
     }
 
