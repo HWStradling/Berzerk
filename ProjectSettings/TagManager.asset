@@ -16,6 +16,7 @@ TagManager:
   - spawn_point
   - v_cam
   - m_cam
+  - ui
   layers:
   - Default
   - TransparentFX

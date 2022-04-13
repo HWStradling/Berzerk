@@ -7,9 +7,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject[] inventoryUIItems;
     // Start is called before the first frame update
 
-    public void EnableUIElement(GameObject item)
+    public void EnableUIElement(string item)
     {
-        switch (item.name) // checks item tag against available  UI Icons, and sets active if equal;
+        Debug.Log(item);
+        switch (item) // checks item tag against available  UI Icons, and sets active if equal;
         {
             case "basic_gun":
                 inventoryUIItems[0].SetActive(true);
@@ -20,29 +21,20 @@ public class UIController : MonoBehaviour
         }
 
     }
-    public void ChangeSelectedItem(GameObject item)
+    public void ChangeSelectedItem(string item)
     {
-        if (item != null)
+        switch (item) // checks item tag against available  UI Icons, and sets active if equal;
         {
-            switch (item.name) // checks item tag against available  UI Icons, and sets active if equal;
-            {
-                case "basic_gun":
-                    inventoryUIItems[0].SetActive(true);
-                    inventoryUIItems[0].GetComponent<SpriteRenderer>().color = Color.green;
-                    return;
-                default:
-                    Debug.Log("unrecognised pickup");
-                    break;
-            }
+            case "basic_gun":
+                inventoryUIItems[0].SetActive(true);
+                inventoryUIItems[0].GetComponent<SpriteRenderer>().color = Color.green;
+                return;
+            default:
+                foreach (GameObject element in inventoryUIItems)
+                {
+                    element.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                break;
         }
-        else
-        {
-            foreach (GameObject element in inventoryUIItems)
-            {
-                element.GetComponent<SpriteRenderer>().color = Color.white;
-            }
-        }
-        
-
     }
 }

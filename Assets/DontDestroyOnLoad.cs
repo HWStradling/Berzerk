@@ -9,6 +9,7 @@ public class DontDestroyOnLoad : MonoBehaviour
     static private bool alreadyCreatedVCam = false;
     static private bool alreadyCreatedPlayer = false;
     static private bool alreadyCreatedMCam = false;
+    static private bool alreadyCreatedUI = false;
     void Start()
     {
         if (!alreadyCreatedVCam && gameObject.CompareTag("v_cam"))
@@ -27,6 +28,11 @@ public class DontDestroyOnLoad : MonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
             alreadyCreatedPlayer = true;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        } else if (!alreadyCreatedUI && gameObject.CompareTag("ui"))
+        {
+            DontDestroyOnLoad(gameObject);
+            alreadyCreatedUI= true;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else

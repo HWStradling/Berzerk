@@ -9,7 +9,7 @@ public class PickupController : MonoBehaviour
         Debug.Log("collision with: " + collisionObject.tag);
         if (collisionObject.CompareTag("Player"))
         {
-            if (collisionObject.GetComponent<PlayerInventoryController>().TryAddToInventory(gameObject))
+            if (collisionObject.GetComponent<PlayerInventoryController>().TryAddToInventory(gameObject.name))
             {
                 gameObject.SetActive(false);
             }

@@ -5,10 +5,9 @@ using UnityEngine.Events;
 
 public class PlayerInventoryController : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> inventory = new List<GameObject>();
-    [SerializeField] UnityEvent<GameObject> OnChangeSelectedItem;
-    [SerializeField] UnityEvent<GameObject> OnAddItemToInventory;
-    private GameObject selectedItemObject;
+    [SerializeField] private List<string> inventory = new List<string>();
+    [SerializeField] UnityEvent<string> OnChangeSelectedItem; // TODO change relevent methods
+    [SerializeField] UnityEvent<string> OnAddItemToInventory;
     private Animator animator;
 
     private void Start()
@@ -19,12 +18,12 @@ public class PlayerInventoryController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            TryUpdateItemSelection(1);
+            TryUpdateItemSelection("basic_gun");
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            TryUpdateItemSelection(0);
+            TryUpdateItemSelection("empty");
         }
 
     }
@@ -32,14 +31,15 @@ public class PlayerInventoryController : MonoBehaviour
     // checks if the item passed already exists in the players inventory,
     // returns true if it already exists,
     // returns false if it doesnt already exist,
-    private bool InventoryHasItem(GameObject Checkitem)
+    private bool InventoryHasItem(string Checkitem)
     {
         bool hasItem = true;
         if (inventory.Count > 0) // if inventory is not empty,
         {
-            inventory.ForEach(delegate (GameObject item) // foreach item in the inventory
+
+            inventory.ForEach(delegate (string item) // foreach item in the inventory
             {
-                if (Checkitem.CompareTag(item.tag)) // if item already exists in inventory break out of the foreach,
+                if (item == Checkitem) // if item already exists in inventory break out of the foreach,
                     return;
                 else
                     hasItem = false; // item not already in inventory,
@@ -52,7 +52,7 @@ public class PlayerInventoryController : MonoBehaviour
         return hasItem;
     }
     //called by PickupController, trys to add item to inventory, returns success boolean,
-    public bool TryAddToInventory(GameObject itemToAdd)
+    public bool TryAddToInventory(string itemToAdd)
     {
         if (InventoryHasItem(itemToAdd)) // if item already in inventory,
         {
@@ -66,25 +66,33 @@ public class PlayerInventoryController : MonoBehaviour
             return true;
         }
     }
-    private void TryUpdateItemSelection(int selection)
+    private void TryUpdateItemSelection(string selection)
     {
+        int selectedInt = 0;
         if (inventory.Count == 0)
         {
             return;
         }
-        else if (selection == 0)
+        else if (selection == "empty")
         {
-            selectedItemObject = null;
-            OnChangeSelectedItem?.Invoke(null);
-            animator.SetInteger("Selected", selection);
+            OnChangeSelectedItem?.Invoke("empty");
+            animator.SetInteger("Selected", 0);
         }
-        else if (selection >= inventory.Count -1)
+        else if (inventory.Contains(selection))
         {
-            animator.SetInteger("Selected", selection);
-            selectedItemObject = inventory[Mathf.Max(selection - 1,0) ];
+            switch (selection)
+            {
+                case "basic_gun":
+                    selectedInt = 1;
+                    break;
+                case "rifle":
+                    selectedInt = 2;
+                    break;
+            }
+            animator.SetInteger("Selected", selectedInt);
 
-            OnChangeSelectedItem?.Invoke(selectedItemObject); //event for item selection changed,
-            Debug.Log(selectedItemObject.tag);
+            OnChangeSelectedItem?.Invoke(selection); //event for item selection changed,
+
         }
     }
 

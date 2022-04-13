@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerCombatController : MonoBehaviour
 {
     // state variables
-    private GameObject selectedWeapon;
+    private string selectedWeapon;
     private int directionFacing;
     private bool attackDelayed =  false;
 
@@ -39,7 +39,7 @@ public class PlayerCombatController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && selectedWeapon != null)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && selectedWeapon != "empty")
         {
             AttackSequence();
         }
@@ -53,7 +53,7 @@ public class PlayerCombatController : MonoBehaviour
         
         if (attackDelayed == false)
         {
-            switch (selectedWeapon.name)
+            switch (selectedWeapon)
             {
                 case "basic_gun":
                     StartCoroutine(BasicGunAttack());
@@ -111,14 +111,14 @@ public class PlayerCombatController : MonoBehaviour
     {
         directionFacing = newDirectionFacing;
     }
-    public void UpdateSelectedWeapon(GameObject newSelectedItem)
+    public void UpdateSelectedWeapon(string newSelectedItem)
     {
-        if (newSelectedItem == null)
+        if (newSelectedItem == "empty")
         {
             selectedWeapon = newSelectedItem;
             return;
         }
-        if (newSelectedItem.CompareTag("Weapon"))
+        if (newSelectedItem == "basic_gun" || newSelectedItem == "rifle")
         {
             selectedWeapon = newSelectedItem;
         }
