@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class PlayerInventoryController : MonoBehaviour
 {
-    [SerializeField] private List<string> inventory = new List<string>();
+    [SerializeField] public List<string> inventory = new List<string>();
     [SerializeField] UnityEvent<string> OnChangeSelectedItem; // TODO change relevent methods
     [SerializeField] UnityEvent<string> OnAddItemToInventory;
     private Animator animator;

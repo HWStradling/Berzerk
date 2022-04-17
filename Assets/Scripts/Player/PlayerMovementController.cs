@@ -31,10 +31,9 @@ public class PlayerMovementController : MonoBehaviour
         MoveToSpawnPoint();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        SceneManager.sceneLoaded += OnSceneLoaded;
 
     }
-    /*private void OnEnable()
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -42,7 +41,12 @@ public class PlayerMovementController : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-    }*/
+    }
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         MoveToSpawnPoint();
@@ -132,24 +136,5 @@ public class PlayerMovementController : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    /*private void NextScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-    private void PreviousScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("next_level"))
-        {
-            Invoke(nameof(NextScene), 3.0f);
-        }
-        else if (collision.CompareTag("previous_level"))
-        {
-            Invoke(nameof(PreviousScene), 3.0f);
-        }
-    }*/
+    
 }

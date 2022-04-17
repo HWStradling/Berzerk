@@ -16,24 +16,20 @@ public class DontDestroyOnLoad : MonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
             alreadyCreatedVCam = true;
-            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else if (!alreadyCreatedMCam && gameObject.CompareTag("m_cam"))
         {
             DontDestroyOnLoad(gameObject);
             alreadyCreatedMCam = true;
-            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else if (!alreadyCreatedPlayer && gameObject.CompareTag("Player"))
         {
             DontDestroyOnLoad(gameObject);
             alreadyCreatedPlayer = true;
-            SceneManager.sceneLoaded += OnSceneLoaded;
         } else if (!alreadyCreatedUI && gameObject.CompareTag("ui"))
         {
             DontDestroyOnLoad(gameObject);
             alreadyCreatedUI= true;
-            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -41,13 +37,40 @@ public class DontDestroyOnLoad : MonoBehaviour
         }
 
     }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        if (gameObject.CompareTag("v_cam"))
+        {
+            alreadyCreatedVCam = false;
+        }
+        else if (gameObject.CompareTag("m_cam"))
+        {
+            alreadyCreatedMCam = false;
+        }
+        else if (gameObject.CompareTag("Player"))
+        {
+            alreadyCreatedPlayer = false;
+        }
+        else if (gameObject.CompareTag("ui"))
+        {
+            alreadyCreatedUI = false;
+        }
+    }
+
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "MenuScene")
         {
             Debug.Log("menu scene");
-            gameObject.SetActive(false);
+            /*Destroy(gameObject);*/
         }
         else
         {
