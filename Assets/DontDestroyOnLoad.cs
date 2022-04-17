@@ -46,10 +46,12 @@ public class DontDestroyOnLoad : MonoBehaviour
     {
         if (scene.name == "MenuScene")
         {
+            Debug.Log("menu scene");
             gameObject.SetActive(false);
         }
         else
         {
+            Debug.Log("other scene");
             gameObject.SetActive(true);
         }
     }

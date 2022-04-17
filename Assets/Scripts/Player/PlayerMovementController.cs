@@ -132,7 +132,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    private void NextScene()
+    /*private void NextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -151,5 +151,5 @@ public class PlayerMovementController : MonoBehaviour
         {
             Invoke(nameof(PreviousScene), 3.0f);
         }
-    }
+    }*/
 }
