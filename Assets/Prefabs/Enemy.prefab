@@ -226,27 +226,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c3958c9279d72746b80abac82762239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTransform: {fileID: 0}
   WallLayer:
     serializedVersion: 2
     m_Bits: 8
-  animator: {fileID: 0}
-  rb: {fileID: 0}
-  patrolSpeed: 50
-  followSpeed: 65
-  transitionSpeed: 40
   patrolPattern: []
   enemyType: 0
   OnAttacking:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 155684285594806758}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+        m_TargetAssemblyTypeName: EnemyCombatController, Assembly-CSharp
+        m_MethodName: SetAttackState
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -282,12 +276,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackState: 0
   directionFacingState: 0
-  eType1AttackDelay: 0
-  eType1BulletSpeed: 0
-  eType1BulletDamage: 0
-  bulletPrefabArray: []
-  target: {fileID: 0}
-  firepoint: {fileID: 0}
+  enemyType: 1
+  bulletPrefabArray:
+  - {fileID: 8387325285607711894, guid: 0f4fd5bb0f563e94c87973b578cf4033, type: 3}
+  - {fileID: 9039026809286866027, guid: 90d8281adbc53a446a1baf41dddbc97b, type: 3}
+  - {fileID: 3888545099882349768, guid: 9eec8042b7fdfdc4382a1a643df96089, type: 3}
+  firepoint: {fileID: 6315630207386569213}
 --- !u!114 &8368132932622435621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,7 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 100
+  maxHealth: 40
   maxLives: 1
   OnHealthChanged:
     m_PersistentCalls:
@@ -324,7 +318,7 @@ MonoBehaviour:
   OnDeathRespawn:
     m_PersistentCalls:
       m_Calls: []
-  OnDeath:
+  OnDeathFinal:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &2278664967385040220
@@ -440,7 +434,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -105541197
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 9367cc4411a2e714fa32981fc06b9e96, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0

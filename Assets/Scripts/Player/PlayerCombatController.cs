@@ -19,11 +19,11 @@ public class PlayerCombatController : MonoBehaviour
     [SerializeField] private GameObject[] bulletPrefabArray;
     [SerializeField] private GameObject WeaponContainer;
 
-    //basic gun constants
-    [SerializeField] private float bulletDelay;
-    [SerializeField] private float basicGunBulletSpeed;
-    [SerializeField] private float basicGunDamage;
+    //basic gun firing points
     [SerializeField] private Transform[] basicGunFiringPoints;
+
+    //rifle firing points
+    [SerializeField] private Transform[] rifleFiringPoints;
 
 
     // Start is called before the first frame update
@@ -56,17 +56,17 @@ public class PlayerCombatController : MonoBehaviour
             switch (selectedWeapon)
             {
                 case "basic_gun":
-                    StartCoroutine(BasicGunAttack());
+                    StartCoroutine(GunAttack(basicGunFiringPoints, new BasicGun()));
                     break;
                 case "rifle":
-                    RifleAttack();
+                    StartCoroutine(GunAttack(rifleFiringPoints, new Rifle()));
                     break;
                 default:
                     break;
             }
         }
     }
-    IEnumerator BasicGunAttack()
+    IEnumerator GunAttack(Transform[] firepoints, IWeapon weapon)
     {
         if (!gameObject.activeInHierarchy)
         {
@@ -78,34 +78,30 @@ public class PlayerCombatController : MonoBehaviour
         switch (directionFacing)
         {
             case 0:
-                firepoint = basicGunFiringPoints[0];
+                firepoint = firepoints[0];
                 bullet = Instantiate(bulletPrefabArray[0], firepoint.position, firepoint.rotation);
                 bC = bullet.GetComponent<BulletController>();
-                bC.Direction = 0; bC.BulletSpeed = basicGunBulletSpeed; bC.Damage = basicGunDamage; bC.Owner = gameObject;
+                bC.Direction = 0; bC.BulletSpeed = weapon.BulletSpeed; bC.Damage = weapon.WeaponDamage; bC.Owner = gameObject;
                 break;
             case 1:
-                firepoint = basicGunFiringPoints[1];
+                firepoint = firepoints[1];
                 bullet = Instantiate(bulletPrefabArray[1], firepoint.position, firepoint.rotation);
                 bC = bullet.GetComponent<BulletController>();
-                bC.Direction = 1; bC.BulletSpeed = basicGunBulletSpeed; bC.Damage = basicGunDamage; bC.Owner = gameObject;
+                bC.Direction = 1; bC.BulletSpeed = weapon.BulletSpeed; bC.Damage = weapon.WeaponDamage; bC.Owner = gameObject;
                 break;
             case 2:
             case 3:
-                firepoint = basicGunFiringPoints[2];
+                firepoint = firepoints[2];
                 bullet = Instantiate(bulletPrefabArray[2], firepoint.position, firepoint.rotation);
                 bC = bullet.GetComponent<BulletController>();
-                bC.Direction = 3; bC.BulletSpeed = basicGunBulletSpeed; bC.Damage = basicGunDamage; bC.Owner = gameObject;
+                bC.Direction = 3; bC.BulletSpeed = weapon.BulletSpeed; bC.Damage = weapon.WeaponDamage; bC.Owner = gameObject;
                 break;
             default:
                 break;
         }
         attackDelayed = true;
-        yield return new WaitForSeconds(bulletDelay);
+        yield return new WaitForSeconds(weapon.BulletDelay);
         attackDelayed = false;
-    }
-    private void RifleAttack()
-    {
-        throw new System.NotImplementedException();
     }
     public void UpdateDirectionFacing(int newDirectionFacing)
     {

@@ -18,6 +18,10 @@ public class UIController : MonoBehaviour
                 newItemAcheivment?.Invoke(0);
                 inventoryUIItems[0].SetActive(true);
                 return;
+            case "rifle":
+                newItemAcheivment?.Invoke(3);
+                inventoryUIItems[1].SetActive(true);
+                return;
             default:
                 Debug.Log("unrecognised pickup");
                 break;
@@ -29,15 +33,25 @@ public class UIController : MonoBehaviour
         switch (item) // checks item tag against available  UI Icons, and sets active if equal;
         {
             case "basic_gun":
+                DeselectItems();
                 inventoryUIItems[0].SetActive(true);
                 inventoryUIItems[0].GetComponent<SpriteRenderer>().color = Color.green;
                 return;
+            case "rifle":
+                DeselectItems();
+                inventoryUIItems[1].SetActive(true);
+                inventoryUIItems[1].GetComponent<SpriteRenderer>().color = Color.green;
+                return;
             default:
-                foreach (GameObject element in inventoryUIItems)
-                {
-                    element.GetComponent<SpriteRenderer>().color = Color.white;
-                }
+                DeselectItems();
                 break;
+        }
+    }
+    private void DeselectItems()
+    {
+        foreach (GameObject element in inventoryUIItems)
+        {
+            element.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 }

@@ -18,6 +18,7 @@ public class HealthController : MonoBehaviour, IAttackable
     [SerializeField] UnityEvent<int> OnLivesChanged;
     [SerializeField] UnityEvent OnDeathRespawn;
     [SerializeField] UnityEvent OnDeathFinal;
+    [SerializeField] UnityEvent<int> OnEnemyDeath;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +56,7 @@ public class HealthController : MonoBehaviour, IAttackable
         if (gameObject.CompareTag("Enemy"))
         {
             OnDeathFinal?.Invoke();
+            OnEnemyDeath?.Invoke(2);
             gameObject.SetActive(false);
         }
         else if (gameObject.CompareTag("Player"))

@@ -6,15 +6,11 @@ public class EnemyCombatController : MonoBehaviour
 {
     // state/type variables
     [SerializeField] private bool attackState = false;
-    private int enemyType;
     private bool attackDelayed = false;
     public int directionFacingState;
-    
 
-    // enemy type 1 contstants
-    [SerializeField] private float eType1AttackDelay;
-    [SerializeField] private float eType1BulletSpeed;
-    [SerializeField] private float eType1BulletDamage;
+    [SerializeField]private int enemyType;
+    private IEnemyType enemyTypeData;
 
     // references
     [SerializeField] private GameObject[] bulletPrefabArray;
@@ -23,11 +19,21 @@ public class EnemyCombatController : MonoBehaviour
  
     void Start()
     {
-        if (GameObject.FindGameObjectsWithTag("Player") != null)
+        if (GameObject.FindGameObjectsWithTag("Player").Length > 0)
         {
             targetTransform = GameObject.FindGameObjectsWithTag("Player")[0].transform;
         }
-        enemyType = gameObject.GetComponent<EnemyController>().enemyType;
+        switch (enemyType)
+        {
+            case 0:
+                enemyTypeData = new Type0Enemy();
+                break;
+            case 1:
+                enemyTypeData = new Type1Enemy();
+                break;
+            default:
+                break;
+        }
         directionFacingState = gameObject.GetComponent<EnemyController>().DirectionFacingState;
     }
 
@@ -55,48 +61,48 @@ public class EnemyCombatController : MonoBehaviour
     }
     IEnumerator BasicAttack()
     {
-        GameObject bullet;
-        BulletController bC;
         attackDelayed = true;
-        yield return new WaitForSeconds(eType1AttackDelay);
-        if (!targetTransform.gameObject.activeInHierarchy)
+        yield return new WaitForSeconds(enemyTypeData.AttackDelay);
+        if (!targetTransform.gameObject.activeInHierarchy || !attackState)
         {
             yield break;
         }
-            
-        
         Vector2 directionToPlayer = targetTransform.position - firepoint.position;
         float angleToPlayer = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
         switch (directionFacingState)
         {
             case 0:
                 firepoint.rotation = Quaternion.AngleAxis(angleToPlayer + 90, Vector3.forward);
-                bullet = Instantiate(bulletPrefabArray[0], firepoint.position, firepoint.rotation);
-                bC = bullet.GetComponent<BulletController>();
-                bC.Direction = 0; bC.BulletSpeed = eType1BulletSpeed; bC.Damage = eType1BulletDamage; bC.Owner = gameObject;
+                SetupBullet(0, 0);
                 break;
             case 1:
                 firepoint.rotation = Quaternion.AngleAxis(angleToPlayer - 90, Vector3.forward);
-                bullet = Instantiate(bulletPrefabArray[1], firepoint.position, firepoint.rotation);
-                bC = bullet.GetComponent<BulletController>();
-                bC.Direction = 1; bC.BulletSpeed = eType1BulletSpeed; bC.Damage = eType1BulletDamage; bC.Owner = gameObject;
+                SetupBullet(1, 1);
                 break;
             case 2:
                 firepoint.rotation = Quaternion.AngleAxis(angleToPlayer + 180, Vector3.forward);
-                bullet = Instantiate(bulletPrefabArray[2], firepoint.position, firepoint.rotation);
-                bC = bullet.GetComponent<BulletController>();
-                bC.Direction = 2; bC.BulletSpeed = eType1BulletSpeed; bC.Damage = eType1BulletDamage; bC.Owner = gameObject;
+                SetupBullet(2, 2);
                 break;
             case 3:
                 firepoint.rotation = Quaternion.AngleAxis(angleToPlayer + 180, Vector3.forward);
-                bullet = Instantiate(bulletPrefabArray[2], firepoint.position, firepoint.rotation);
-                bC = bullet.GetComponent<BulletController>();
-                bC.Direction = 3; bC.BulletSpeed = eType1BulletSpeed; bC.Damage = eType1BulletDamage; bC.Owner = gameObject;
+                SetupBullet(2, 3);
                 break;
             default:
                 break;
         }
+        
         attackDelayed = false;
+    }
+
+    private void SetupBullet(int bulletPrefabIndex, int direction)
+    {
+        GameObject bullet = Instantiate(bulletPrefabArray[bulletPrefabIndex], firepoint.position, firepoint.rotation);
+        BulletController bC = bullet.GetComponent<BulletController>();
+        bC.Direction = direction;
+        bC.BulletSpeed = enemyTypeData.BulletSpeed; 
+        bC.Damage = enemyTypeData.BulletDamage; 
+        bC.Owner = gameObject;
+
     }
   
     public void SetAttackState(bool state)
