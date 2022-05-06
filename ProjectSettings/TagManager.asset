@@ -19,6 +19,9 @@ TagManager:
   - ui
   - acheivment_text
   - acheivment_container
+  - options_menu
+  - main_menu
+  - bg_audio
   layers:
   - Default
   - TransparentFX

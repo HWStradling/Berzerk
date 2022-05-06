@@ -1,12 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PickupController : MonoBehaviour
 {
+    private bool invChecked = false;
+    private void FixedUpdate()
+    {
+        if (!invChecked)
+        {
+            if (GameObject.FindGameObjectsWithTag("Player").Length > 0)
+            {
+                if (gameObject.name == "basic_gun" || gameObject.name == "rifle")
+                {
+                    GameObject player = GameObject.FindGameObjectWithTag("Player");
+                    if (player.GetComponent<PlayerInventoryController>().inventory.Contains(gameObject.name))
+                    {
+                        gameObject.SetActive(false);
+                    }
+                }
+                
+            }
+            invChecked = true;
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collisionObject)
     {
-        Debug.Log("collision with: " + collisionObject.tag);
         if (collisionObject.CompareTag("Player"))
         {
             if (collisionObject.GetComponent<PlayerInventoryController>().TryAddToInventory(gameObject.name))
@@ -16,9 +33,8 @@ public class PickupController : MonoBehaviour
             else
             {
                 Debug.Log("player already has item");
-                // player already has item/inventory add failed, process here,
             }
-            
+
         }
     }
 }

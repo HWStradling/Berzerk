@@ -1,17 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class PlayerInventoryController : MonoBehaviour
 {
-    [SerializeField] public List<string> inventory = new List<string>();
+    public List<string> inventory = new List<string>();
     [SerializeField] UnityEvent<string> OnChangeSelectedItem; // TODO change relevent methods
     [SerializeField] UnityEvent<string> OnAddItemToInventory;
     private Animator animator;
-
     private void Start()
     {
+        string[] loadedInventory = SaveSystem.PlayerData.Inventory;
+
+        foreach (var item in loadedInventory)
+        {
+            TryAddToInventory(item);
+        }
         animator = GetComponent<Animator>();
     }
     private void Update()
@@ -38,23 +42,17 @@ public class PlayerInventoryController : MonoBehaviour
     // returns false if it doesnt already exist,
     private bool InventoryHasItem(string Checkitem)
     {
-        bool hasItem = true;
         if (inventory.Count > 0) // if inventory is not empty,
         {
-
-            inventory.ForEach(delegate (string item) // foreach item in the inventory
+            if (inventory.Contains(Checkitem))
             {
-                if (item == Checkitem) // if item already exists in inventory break out of the foreach,
-                    return;
-                else
-                    hasItem = false; // item not already in inventory,
-            });
+                return true;
+            } else
+            {
+                return false;
+            }
         }
-        else
-        {
-            hasItem = false; // empty inventory therefore not in inventory already,
-        }
-        return hasItem;
+        return false;
     }
     //called by PickupController, trys to add item to inventory, returns success boolean,
     public bool TryAddToInventory(string itemToAdd)
@@ -95,7 +93,6 @@ public class PlayerInventoryController : MonoBehaviour
                     break;
             }
             animator.SetInteger("Selected", selectedInt);
-
             OnChangeSelectedItem?.Invoke(selection); //event for item selection changed,
 
         }

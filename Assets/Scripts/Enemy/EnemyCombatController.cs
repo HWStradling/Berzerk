@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyCombatController : MonoBehaviour
 {
@@ -9,14 +9,16 @@ public class EnemyCombatController : MonoBehaviour
     private bool attackDelayed = false;
     public int directionFacingState;
 
-    [SerializeField]private int enemyType;
+    [SerializeField] private int enemyType;
     private IEnemyType enemyTypeData;
+
+    [SerializeField] UnityEvent Shoot;
 
     // references
     [SerializeField] private GameObject[] bulletPrefabArray;
     private Transform targetTransform;
     [SerializeField] private Transform firepoint;
- 
+
     void Start()
     {
         if (GameObject.FindGameObjectsWithTag("Player").Length > 0)
@@ -41,8 +43,7 @@ public class EnemyCombatController : MonoBehaviour
     void Update()
     {
         directionFacingState = gameObject.GetComponent<EnemyController>().DirectionFacingState;
-
-        if (attackState && enemyType > 0 && attackDelayed == false && targetTransform!= null)
+        if (attackState && enemyType > 0 && attackDelayed == false && targetTransform != null)
         {
             switch (enemyType) // different enemy type attacks,
             {
@@ -65,8 +66,10 @@ public class EnemyCombatController : MonoBehaviour
         yield return new WaitForSeconds(enemyTypeData.AttackDelay);
         if (!targetTransform.gameObject.activeInHierarchy || !attackState)
         {
+            attackDelayed = false;
             yield break;
         }
+        Shoot?.Invoke();
         Vector2 directionToPlayer = targetTransform.position - firepoint.position;
         float angleToPlayer = Mathf.Atan2(directionToPlayer.y, directionToPlayer.x) * Mathf.Rad2Deg;
         switch (directionFacingState)
@@ -90,7 +93,7 @@ public class EnemyCombatController : MonoBehaviour
             default:
                 break;
         }
-        
+
         attackDelayed = false;
     }
 
@@ -99,12 +102,12 @@ public class EnemyCombatController : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefabArray[bulletPrefabIndex], firepoint.position, firepoint.rotation);
         BulletController bC = bullet.GetComponent<BulletController>();
         bC.Direction = direction;
-        bC.BulletSpeed = enemyTypeData.BulletSpeed; 
-        bC.Damage = enemyTypeData.BulletDamage; 
+        bC.BulletSpeed = enemyTypeData.BulletSpeed;
+        bC.Damage = enemyTypeData.BulletDamage;
         bC.Owner = gameObject;
 
     }
-  
+
     public void SetAttackState(bool state)
     {
         Debug.Log("Enemy Attack State: " + state);

@@ -1,13 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerCombatController : MonoBehaviour
 {
     // state variables
     private string selectedWeapon;
     private int directionFacing;
-    private bool attackDelayed =  false;
+    private bool attackDelayed = false;
 
     //gun rotation variables
     [SerializeField] private Transform arm;
@@ -25,11 +25,11 @@ public class PlayerCombatController : MonoBehaviour
     //rifle firing points
     [SerializeField] private Transform[] rifleFiringPoints;
 
-
+    [SerializeField] UnityEvent OnShoot;
     // Start is called before the first frame update
     private void Awake()
     {
-        
+
     }
     void Start()
     {
@@ -50,7 +50,7 @@ public class PlayerCombatController : MonoBehaviour
     }
     private void AttackSequence()
     {
-        
+
         if (attackDelayed == false)
         {
             switch (selectedWeapon)
@@ -75,6 +75,7 @@ public class PlayerCombatController : MonoBehaviour
         Transform firepoint;
         GameObject bullet;
         BulletController bC;
+        OnShoot?.Invoke();
         switch (directionFacing)
         {
             case 0:

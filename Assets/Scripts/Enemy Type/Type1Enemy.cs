@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Type1Enemy : IEnemyType
 {
     public float PatrolSpeed { get; private set; } = 25;

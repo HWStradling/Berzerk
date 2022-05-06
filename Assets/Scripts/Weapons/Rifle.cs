@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Rifle : IWeapon
 {
     public float BulletDelay { get; private set; } = 0.3f;

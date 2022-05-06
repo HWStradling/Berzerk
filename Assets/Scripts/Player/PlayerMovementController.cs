@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -22,10 +20,15 @@ public class PlayerMovementController : MonoBehaviour
     private bool isSprinting;
 
 
+
     public UnityEvent<int> OnDirectionChange;
 
+    public int maxLevel = 1;
 
-
+    private void Awake()
+    {
+        maxLevel = SaveSystem.PlayerData.MaxLevel;
+    }
     private void Start()
     {
         MoveToSpawnPoint();
@@ -50,6 +53,11 @@ public class PlayerMovementController : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         MoveToSpawnPoint();
+        int currentBuildIndex = SceneManager.GetActiveScene().buildIndex;
+        if (currentBuildIndex > maxLevel)
+        {
+            maxLevel = currentBuildIndex;
+        }
     }
 
     private void Update()
@@ -68,7 +76,7 @@ public class PlayerMovementController : MonoBehaviour
         // switch for setting the animator state for left and right directions,
         switch (directionOfTravel.x)
         {
-            case  1:
+            case 1:
                 transform.rotation = new Quaternion(0f, 180f, 0f, 1);
                 animator.SetInteger("Direction", 2);
                 directionFacingState = 2;
@@ -104,7 +112,7 @@ public class PlayerMovementController : MonoBehaviour
             directionChanged = false;
         }
 
-        
+
 
         // updating the animator with the correct parameters for Walking and Sprinting,
         animator.SetBool("Walking", directionOfTravel.y != 0 || directionOfTravel.x != 0);
@@ -130,11 +138,12 @@ public class PlayerMovementController : MonoBehaviour
         else
         {
             transform.position = spawnPoint.position;
-        } 
+        }
     }
     public void onDeathFinal()
     {
-        gameObject.SetActive(false);
+        ExitToMenu.DestroyForMenu();
+        SceneManager.LoadScene(0);
     }
-    
+
 }

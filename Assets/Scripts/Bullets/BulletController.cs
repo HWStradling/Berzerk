@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float ?BulletSpeed { private get; set; }
-    public int ?Direction { private get; set; } // 0 down, 1 up, 2 or 3 side.
-    public float ?Damage { private get; set; }
+    public float? BulletSpeed { private get; set; }
+    public int? Direction { private get; set; } // 0 down, 1 up, 2 or 3 side.
+    public float? Damage { private get; set; }
     private string ownerTag;
 
     public GameObject Owner { private get; set; }
@@ -39,13 +37,13 @@ public class BulletController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
- 
+
         if (collision.gameObject == null)
         {
             Debug.Log("collision target == null");
             return;
         }
- 
+
         if (!collision.CompareTag(ownerTag))
         {
             if (collision.CompareTag("Enemy"))
@@ -71,6 +69,6 @@ public class BulletController : MonoBehaviour
         {
             Debug.Log("owner/friendly Collision");
         }
-        
+
     }
 }

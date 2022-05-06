@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -42,10 +40,13 @@ public class EnemyController : MonoBehaviour
             case 1:
                 enemyTypeData = new Type1Enemy();
                 break;
+            case 2:
+                enemyTypeData = new Type2Enemy();
+                break;
             default:
                 break;
         }
-         
+
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         if (GameObject.FindGameObjectsWithTag("Player").Length > 0)
@@ -57,7 +58,7 @@ public class EnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+
         // follows the player if visible, patrols if not visible.
         if (targetTransform != null)
         {
@@ -65,7 +66,7 @@ public class EnemyController : MonoBehaviour
             // or findingState and target not visible (finding but not found),
             if (attackState && !IsTargetVisible())
             {
-                
+
                 findingState = true;
                 attackState = false;
                 OnAttacking?.Invoke(attackState);
@@ -79,8 +80,8 @@ public class EnemyController : MonoBehaviour
                 FindTarget();
         }
     }
-         
-    
+
+
     //checks if the player is visible to the enemy, returns true if player is visible, false if not visible.
     bool IsTargetVisible()
     {
@@ -111,7 +112,7 @@ public class EnemyController : MonoBehaviour
         if (distanceToTarget > 1.5)
         {
             rb.velocity = enemyTypeData.FollowSpeed * Time.fixedDeltaTime * directionToTarget;
-            UpdateAnimation();         
+            UpdateAnimation();
         }
         else
         {
@@ -127,6 +128,10 @@ public class EnemyController : MonoBehaviour
     {
         attackState = false;
         OnAttacking?.Invoke(attackState);
+        if (patrolPattern.Length == 0)
+        {
+            return;
+        }
 
         SetDirDist(patrolPattern[currentWaypoint], false);
 
@@ -143,7 +148,7 @@ public class EnemyController : MonoBehaviour
                 currentWaypoint++; // set new waypoint,
                 UpdateAnimation();
             }
-                
+
         }
         else // enemy not at current waypoint,
         {
@@ -162,21 +167,22 @@ public class EnemyController : MonoBehaviour
     // continues following vector towards where player was last seen,
 
     void FindTarget()
-    {    
+    {
         // if enemy reaches last known player location and does not find player,
         // sets finding state to false, (starts normal patrol or follow behavior)
-        if (lastKnownDistanceToTarget < 5 || followTimer == 250 )
+        if (lastKnownDistanceToTarget < 5 || followTimer == 250)
         {
             findingState = false;
             followTimer = 0;
-        } else
+        }
+        else
         {
             followTimer++;
         }
-        
+
     }
     // shuffles patrol pattern when colliding with another enemy to prevent them hanging up,
-     void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
@@ -184,7 +190,7 @@ public class EnemyController : MonoBehaviour
             {
                 ShufflePatrolPattern();
             }
-            
+
         }
     }
     // randomly shuffles the patrol pattern array when called to add randomness to the patrol.
@@ -199,8 +205,8 @@ public class EnemyController : MonoBehaviour
         }
 
     }
-     private void UpdateAnimation()
-    { 
+    private void UpdateAnimation()
+    {
         if (Mathf.Abs(rb.velocity.y) > Mathf.Abs(rb.velocity.x))
         {
             animator.SetBool("IsMoving", true);
@@ -214,7 +220,8 @@ public class EnemyController : MonoBehaviour
                 animator.SetInteger("Direction", 0);
                 DirectionFacingState = 0;
             }
-        }else if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.y))
+        }
+        else if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.y))
         {
             animator.SetBool("IsMoving", true);
             if (rb.velocity.x > 0)
@@ -233,7 +240,7 @@ public class EnemyController : MonoBehaviour
             animator.SetBool("IsMoving", false);
         }
 
-}
+    }
 
     private void SetDirDist(Transform target, bool attacking)
     {
