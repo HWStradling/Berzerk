@@ -10,6 +10,11 @@ public class OptionsMenuController : MonoBehaviour
     {
         animator.Play("fade_in");
         volumeSlider.value = PlayerPrefs.GetFloat("volume", 1f);
+
+  /*      if (!PlayerPrefs.HasKey("profile"))
+        {
+            PlayerPrefs.SetString("profile", "Profile 1");
+        }*/
     }
     public void Close()
     {

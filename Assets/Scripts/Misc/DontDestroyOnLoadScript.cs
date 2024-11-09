@@ -59,7 +59,7 @@ public class DontDestroyOnLoadScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("other scene");
+            //Debug.Log("other scene");
             gameObject.SetActive(true);
         }
     }

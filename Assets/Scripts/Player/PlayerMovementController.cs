@@ -27,7 +27,14 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Awake()
     {
-        maxLevel = SaveSystem.PlayerData.MaxLevel;
+        try
+        {
+            maxLevel = SaveSystem.PlayerData.MaxLevel;
+        } catch
+        {
+            maxLevel = 1;
+        }
+        
     }
     private void Start()
     {

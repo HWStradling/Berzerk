@@ -14,9 +14,18 @@ public class ProfileDisplayController : MonoBehaviour
     }
     private void DisplayProfile()
     {
+        if (!SaveSystem.HasSaveGame())
+        {
+            profileName.text = PlayerPrefs.GetString("profile", "Profile 1") + ":";
+            maxLevel.text = "Max Level: 0";
+            achievmentsUnlocked.text = "Achievments Unlocked: 0 ";
+            return;
+
+        }
         profileName.text = PlayerPrefs.GetString("profile", "") + ":";
         maxLevel.text = "Max Level: " + (SaveSystem.PlayerData.MaxLevel -1);
         bool[] achievmentsArray = SaveSystem.PlayerData.Achievments;
+
         if (achievmentsArray[0] == true)
         {
             basicGun.text = "Handgun";

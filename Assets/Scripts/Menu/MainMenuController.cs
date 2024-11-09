@@ -8,7 +8,8 @@ public class MainMenuController : MonoBehaviour
 
     private void Awake()
     {
-        SaveSystem.LoadGame();
+        SaveSystem.LoadGame(); // loads game player data from save file, creates new if null.
+        
     }
     private void OnEnable()
     {

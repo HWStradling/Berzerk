@@ -10,12 +10,24 @@ public class PlayerInventoryController : MonoBehaviour
     private Animator animator;
     private void Start()
     {
-        string[] loadedInventory = SaveSystem.PlayerData.Inventory;
-
-        foreach (var item in loadedInventory)
+        string[] loadedInventory;
+        try
         {
-            TryAddToInventory(item);
+            loadedInventory = SaveSystem.PlayerData.Inventory;
         }
+        catch { 
+            loadedInventory = new string[0];
+        }
+        
+      
+        if (loadedInventory != null)
+        {
+            foreach (var item in loadedInventory)
+            {
+                TryAddToInventory(item);
+            }
+        }
+        
         animator = GetComponent<Animator>();
     }
     private void Update()

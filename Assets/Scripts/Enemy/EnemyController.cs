@@ -71,7 +71,7 @@ public class EnemyController : MonoBehaviour
                 attackState = false;
                 OnAttacking?.Invoke(attackState);
             }
-            Debug.Log("finding state: " + findingState);
+            //Debug.Log("finding state: " + findingState);
             if (IsTargetVisible() && enemyType > 0)
                 FollowTarget();
             else if ((!IsTargetVisible() && !findingState) || enemyType == 0)

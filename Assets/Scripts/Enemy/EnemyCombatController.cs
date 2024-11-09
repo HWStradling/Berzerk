@@ -110,7 +110,7 @@ public class EnemyCombatController : MonoBehaviour
 
     public void SetAttackState(bool state)
     {
-        Debug.Log("Enemy Attack State: " + state);
+        //Debug.Log("Enemy Attack State: " + state);
         attackState = state;
     }
 }

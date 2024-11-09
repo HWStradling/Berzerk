@@ -22,7 +22,15 @@ public class SingletonAchievmentsController : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
             currentProfile = PlayerPrefs.GetString("profile", "Profile 1");
-            bool[] tempAcheivmentsArray = SaveSystem.PlayerData.Achievments;
+            bool[] tempAcheivmentsArray;
+            try
+            {
+                 tempAcheivmentsArray = SaveSystem.PlayerData.Achievments;
+            }
+            catch {
+                 tempAcheivmentsArray = new bool[0];
+            }
+            
             for (int i = 0; i < tempAcheivmentsArray.Length; i++)
             {
                 acheivmentsArray[i] = tempAcheivmentsArray[i];

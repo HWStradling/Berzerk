@@ -20,6 +20,8 @@ public class ProfileSelectionController : MonoBehaviour
                 profileSelector.value = 2;
                 break;
             default:
+                HandleSelectionChange(0);
+                Debug.Log("error playerprefs profile selection defaulting");
                 break;
         }
     }
