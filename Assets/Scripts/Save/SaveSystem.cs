@@ -32,7 +32,7 @@ public class SaveSystem
     }
     public static bool LoadGame()
     {
-        // if changed player, clear acheivments queue,
+        // todo: if changed player, clear acheivments queue,
         if (!HasSaveGame())
         {
             CreateSave();
