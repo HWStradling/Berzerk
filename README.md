@@ -42,7 +42,8 @@ I've revived this project after shelving it for a while., I have fixed some simp
 
 ## Planned Fixes/Improvements:
 
-- Couple chosen volume with player profile/saves,
+- Fix buggy options menu and modify animations for better UX.
+- Couple chosen volume with player profile/saves.
 - Allow custom profile creation and rework profile UI dropdown element population on options page.
 - Modify the achivements window to display input validation and other notifications.
 - Decouple movement and shooting (while Berzerk-like, it gives a clunky gameplay experience).
